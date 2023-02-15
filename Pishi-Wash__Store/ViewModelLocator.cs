@@ -26,13 +26,14 @@ namespace Pishi_Wash__Store
 
             services.AddTransient<mWindowViewModel>();
             services.AddTransient<SignInViewModel>();
+            services.AddTransient<SignUpViewModel>();
             services.AddTransient<BrowseProductViewModel>();
 
             #endregion
 
             #region Connection
 
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContext<UserContext>(options =>
             {
                 var conn = Configuration.GetConnectionString("DefaultConnection");
                 options.UseMySql(conn, ServerVersion.AutoDetect(conn));
@@ -55,6 +56,7 @@ namespace Pishi_Wash__Store
         }
         public mWindowViewModel mWindowViewModel => _provider.GetRequiredService<mWindowViewModel>();
         public SignInViewModel SignInViewModel => _provider.GetRequiredService<SignInViewModel>();
+        public SignUpViewModel SignUpViewModel => _provider.GetRequiredService<SignUpViewModel>();
         public BrowseProductViewModel BrowseProductViewModel => _provider.GetRequiredService<BrowseProductViewModel>();
     }
 }

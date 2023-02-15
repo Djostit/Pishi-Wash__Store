@@ -9,6 +9,6 @@ namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
-
+        //public DelegateCommand SignOutCommand => new(() => { });
     }
 }

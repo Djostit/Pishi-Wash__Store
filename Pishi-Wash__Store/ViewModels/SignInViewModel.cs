@@ -3,6 +3,7 @@ using Pishi_Wash__Store.Services;
 using Pishi_Wash__Store.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +16,42 @@ namespace Pishi_Wash__Store.ViewModels
         private readonly PageService _pageService;
         public string Username { get; set; }
         public string Password { get; set; }
+        public string ErrorMessage { get; set; }
+        public string cAPTCHA { get; set; }
         public SignInViewModel(UserService userService, PageService pageService)
         {
             _userService = userService;
             _pageService = pageService;
         }
-        public AsyncCommand AuthCommand => new(async () => 
+        public AsyncCommand SignInCommand => new(async () => 
         {
-            await _userService.Auth(Username, Password);
+            if (await _userService.AuthorizationAsync(Username, Password))
+            {
+                ErrorMessage = string.Empty;
+                _pageService.ChangePage(new BrowseProductPage());
+            }
+            ErrorMessage = "Неверный логин или пароль";
+        }, bool() => 
+        {
+            if(string.IsNullOrWhiteSpace(Username)
+                || string.IsNullOrWhiteSpace(Password)) 
+            {
+                ErrorMessage = "Пустые поля";
+            }
+            else 
+            {
+                ErrorMessage = string.Empty;
+            }
+            if (ErrorMessage.Equals(string.Empty))
+                return true; return false;
         });
-        public DelegateCommand SignInLater => new(() => { _pageService.ChangePage(new BrowseProductPage()); });
+        public DelegateCommand SignUpCommand => new(() =>
+        {
+            _pageService.ChangePage(new SignUpPage());
+        });
+        public DelegateCommand SignInLaterCommand => new(() => 
+        { 
+            _pageService.ChangePage(new BrowseProductPage()); 
+        });
     }
 }

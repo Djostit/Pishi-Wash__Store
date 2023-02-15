@@ -12,18 +12,18 @@ namespace Pishi_Wash__Store.Services
 {
     public class UserService
     {
-        private readonly DataContext _context;
-        public UserService(DataContext context)
+        private readonly UserContext _context;
+        public UserService(UserContext context)
         {
             _context = context;
         }
-
-        public async Task Auth(string username, string password)
+        public async Task<bool> AuthorizationAsync(string username, string password)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == username);
-            if(user == null) { Debug.WriteLine("null"); }
-            if (user.Password.Equals(password)) { Debug.WriteLine("done"); }
-            else { Debug.WriteLine("password uncorrect"); }
+            var user = await _context.User.SingleOrDefaultAsync(u => u.UserLogin == username);
+            if (user == null)
+                return false;
+            if (user.UserPassword.Equals(password))
+                return true; return false;
         }
     }
 }
