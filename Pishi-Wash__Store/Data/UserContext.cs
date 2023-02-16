@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Pishi_Wash__Store.Models.DbContext;
-
-namespace Pishi_Wash__Store.Data
+﻿namespace Pishi_Wash__Store.Data
 {
     public class UserContext : DbContext
     {

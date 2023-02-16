@@ -1,14 +1,4 @@
-﻿using DevExpress.Mvvm;
-using Pishi_Wash__Store.Services;
-using Pishi_Wash__Store.Views;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class SignUpViewModel : BindableBase
     {

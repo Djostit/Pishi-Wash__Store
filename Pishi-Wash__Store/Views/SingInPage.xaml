@@ -57,10 +57,16 @@
                        Margin="0 2 0 0"
                        FontFamily="{StaticResource pwsFont}"
                        Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="3"
+                       Foreground="#75151e"
+                       HorizontalAlignment="Left"
+                       Margin="0 2 0 0"
+                       FontFamily="{StaticResource pwsFont}"
+                       Text="{Binding ErrorMessageButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Button Grid.Row="4"
                     Foreground="White"
-                    Command="{Binding SignInCommand}"
+                    Command="{Binding SignInCommand, IsAsync=True}"
                     Content="Войти"
                     FontFamily="{StaticResource pwsFont}"
                     Margin="0 10 0 0"/>

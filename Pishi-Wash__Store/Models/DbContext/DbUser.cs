@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Pishi_Wash__Store.Models.DbContext
+﻿namespace Pishi_Wash__Store.Models.DbContext
 {
     public class DbUser
     {

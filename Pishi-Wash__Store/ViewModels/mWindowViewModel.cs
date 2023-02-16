@@ -1,9 +1,4 @@
-﻿using DevExpress.Mvvm;
-using Pishi_Wash__Store.Services;
-using Pishi_Wash__Store.Views;
-using System.Windows.Controls;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class mWindowViewModel : BindableBase
     {

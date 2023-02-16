@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pishi_Wash__Store.Assets
+﻿namespace Pishi_Wash__Store.Assets
 {
-    internal class Global
+    public static class Global
     {
+        public static User CurrentUser { get; set; }
     }
 }

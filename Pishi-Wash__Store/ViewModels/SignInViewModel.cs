@@ -1,12 +1,5 @@
-﻿using DevExpress.Mvvm;
-using Pishi_Wash__Store.Services;
-using Pishi_Wash__Store.Views;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Windows;
 
 namespace Pishi_Wash__Store.ViewModels
 {
@@ -17,6 +10,7 @@ namespace Pishi_Wash__Store.ViewModels
         public string Username { get; set; }
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
+        public string ErrorMessageButton { get; set; }
         public string cAPTCHA { get; set; }
         public SignInViewModel(UserService userService, PageService pageService)
         {
@@ -25,18 +19,31 @@ namespace Pishi_Wash__Store.ViewModels
         }
         public AsyncCommand SignInCommand => new(async () => 
         {
-            if (await _userService.AuthorizationAsync(Username, Password))
+            await Task.Run(async () =>
             {
-                ErrorMessage = string.Empty;
-                _pageService.ChangePage(new BrowseProductPage());
-            }
-            ErrorMessage = "Неверный логин или пароль";
+                if (await _userService.AuthorizationAsync(Username, Password))
+                {
+                    await Application.Current.Dispatcher.InvokeAsync(async () => // Только часть метода должна находиться в потоке пользовательского интерфейса.
+                    {
+                        ErrorMessageButton = string.Empty;
+                        _pageService.ChangePage(new BrowseProductPage());
+                    });
+                }
+                else
+                {
+                    await Application.Current.Dispatcher.InvokeAsync(async () =>
+                    {
+                        ErrorMessageButton = "Неверный логин или пароль";
+                    });
+                }
+            });
         }, bool() => 
         {
             if(string.IsNullOrWhiteSpace(Username)
                 || string.IsNullOrWhiteSpace(Password)) 
             {
                 ErrorMessage = "Пустые поля";
+                ErrorMessageButton = string.Empty;
             }
             else 
             {

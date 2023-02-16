@@ -1,14 +1,24 @@
-﻿using DevExpress.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
-        //public DelegateCommand SignOutCommand => new(() => { });
+        private readonly PageService _pageService;
+        private readonly ProductService _productService;
+        public static List<DbProduct> Products { get; set; }
+        public string FullName { get; set; } = Global.CurrentUser == null ? "Гость" : $"{Global.CurrentUser.UserSurname} {Global.CurrentUser.UserName} {Global.CurrentUser.UserPatronymic}";
+        public BrowseProductViewModel(PageService pageService, ProductService productService)
+        {
+            _pageService = pageService;
+            _productService = productService;
+            Task.Run(async () => Products = await _productService.GetProducts()).Wait();
+        }
+
+        public DelegateCommand SignOutCommand => new(() => 
+        { 
+            Global.CurrentUser = null; 
+            _pageService.ChangePage(new SingInPage()); 
+        });
     }
 }

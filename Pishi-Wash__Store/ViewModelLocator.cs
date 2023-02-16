@@ -1,13 +1,4 @@
-﻿using DevExpress.Mvvm.POCO;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Pishi_Wash__Store.Data;
-using Pishi_Wash__Store.Services;
-using Pishi_Wash__Store.ViewModels;
-using System.IO;
-
-namespace Pishi_Wash__Store
+﻿namespace Pishi_Wash__Store
 {
     internal class ViewModelLocator
     {
@@ -39,12 +30,19 @@ namespace Pishi_Wash__Store
                 options.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
 
+            services.AddDbContext<ProductContext>(options =>
+            {
+                var conn = Configuration.GetConnectionString("DefaultConnection");
+                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+            });
+
             #endregion
 
             #region Services
 
             services.AddSingleton<PageService>();
             services.AddSingleton<UserService>();
+            services.AddSingleton<ProductService>();
 
             #endregion
             

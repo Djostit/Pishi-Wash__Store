@@ -1,14 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Pishi_Wash__Store.Data;
-using Pishi_Wash__Store.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pishi_Wash__Store.Services
+﻿namespace Pishi_Wash__Store.Services
 {
     public class UserService
     {
@@ -23,7 +13,11 @@ namespace Pishi_Wash__Store.Services
             if (user == null)
                 return false;
             if (user.UserPassword.Equals(password))
-                return true; return false;
+            {
+                Global.CurrentUser = new User { Id = user.UserID, UserName = user.UserName, UserSurname = user.UserSurname, UserPatronymic = user.UserPatronymic, UserRole = user.UserRole };
+                return true;
+            }
+            return false;
         }
     }
 }
