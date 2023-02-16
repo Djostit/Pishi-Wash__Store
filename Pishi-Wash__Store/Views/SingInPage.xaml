@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Pishi_Wash__Store.Views"
       mc:Ignorable="d"
       DataContext="{Binding SignInViewModel, 
                     Source={StaticResource ViewModelLocator}}"
@@ -29,55 +28,45 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0"
+            <Image Grid.Row="0" 
+                   Source="\Resources\Image\logo.png"
+                   Height="75"/>
+            <TextBlock Grid.Row="1"
                        Text="Войдите в свою учетную запись!"
                        HorizontalAlignment="Center"
                        FontFamily="{StaticResource pwsFont}"
                        Foreground="Black"/>
-            <TextBox Grid.Row="1"
-                     Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     materialDesign:HintAssist.Hint="Логин"
-                     Margin="0 20 0 0"/>
-            
             <TextBox Grid.Row="2"
-                     Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                     materialDesign:HintAssist.Hint="Пароль"
-                     Margin="0 20 0 0"/>
-            <TextBlock Grid.Row="3"
-                       Foreground="#75151e"
-                       HorizontalAlignment="Left"
-                       Margin="0 2 0 0"
-                       FontFamily="{StaticResource pwsFont}"
+                     Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsTextBox}"
+                     materialDesign:HintAssist.Hint="Логин"/>
+            
+            <PasswordBox Grid.Row="3"
+                     materialDesign:PasswordBoxAssist.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsPasswordBox}"
+                     materialDesign:HintAssist.Hint="Пароль"/>
+            
+            <TextBlock Grid.Row="4"
+                       Style="{StaticResource pwsTextBlockError}"
                        Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="3"
-                       Foreground="#75151e"
-                       HorizontalAlignment="Left"
-                       Margin="0 2 0 0"
-                       FontFamily="{StaticResource pwsFont}"
+            <TextBlock Grid.Row="4"
+                       Style="{StaticResource pwsTextBlockError}"
                        Text="{Binding ErrorMessageButton, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Button Grid.Row="4"
-                    Foreground="White"
+            <Button Grid.Row="5"
+                    Style="{StaticResource pwsButton}"
                     Command="{Binding SignInCommand, IsAsync=True}"
-                    Content="Войти"
-                    FontFamily="{StaticResource pwsFont}"
-                    Margin="0 10 0 0"/>
+                    Content="Войти"/>
 
-            <TextBlock Grid.Row="5"
+            <TextBlock Grid.Row="6"
                        Foreground="Black"
                        HorizontalAlignment="Center"
                        Text="У вас нет учетной записи?"
                        FontFamily="{StaticResource pwsFont}"
                        Margin="0 10 0 0"/>
-            <StackPanel Grid.Row="6"
+            <StackPanel Grid.Row="7"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">
@@ -88,8 +77,7 @@
                         Cursor="Hand">
                     <Underline>Зарегистрироваться</Underline>
                 </Button>
-                <TextBlock Grid.Row="5"
-                           Foreground="Black"
+                <TextBlock Foreground="Black"
                            FontFamily="Comic Sans MS"
                            VerticalAlignment="Center"
                            Text="или"/>

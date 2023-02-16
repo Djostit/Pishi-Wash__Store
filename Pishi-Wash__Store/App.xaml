@@ -21,6 +21,13 @@
             <SolidColorBrush x:Key="pwsSecondaryBg" Color="{StaticResource pwsSecondaryColor}"/>
             <SolidColorBrush x:Key="pwsAccentedBg" Color="{StaticResource pwsAccentedColor}"/>
 
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource pwsSecondaryColor}"/>
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource pwsAccentedColor}"/>
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary500Foreground}"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource pwsSecondaryColor}"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}"/>
+
             <FontFamily x:Key="pwsFont">Comic Sans MS</FontFamily>
 
             <Style x:Key="ButtonToText" 
@@ -50,6 +57,66 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+
+            <Style x:Key="pwsTextBox"
+                   TargetType="{x:Type TextBox}"
+                   BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <Setter Property="Margin"
+                        Value="0 20 0 0"/>
+                <Setter Property="Foreground"
+                        Value="Black"/>
+                <Setter Property="FontFamily"
+                        Value="{StaticResource pwsFont}"/>
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource pwsAccentedBg}"/>
+            </Style>
+
+            <Style x:Key="pwsComboBox"
+                   TargetType="{x:Type ComboBox}"
+                   BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                <Setter Property="Foreground"
+                        Value="Black"/>
+                <Setter Property="FontFamily"
+                        Value="{StaticResource pwsFont}"/>
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource pwsAccentedBg}"/>
+            </Style>
+
+            <Style x:Key="pwsPasswordBox"
+                   TargetType="{x:Type PasswordBox}"
+                   BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
+                <Setter Property="Margin"
+                        Value="0 20 0 0"/>
+                <Setter Property="Foreground"
+                        Value="Black"/>
+                <Setter Property="FontFamily"
+                        Value="{StaticResource pwsFont}"/>
+                <Setter Property="BorderBrush"
+                        Value="{StaticResource pwsAccentedBg}"/>
+            </Style>
+
+            <Style x:Key="pwsTextBlockError"
+                   TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground"
+                        Value="#75151e"/>
+                <Setter Property="HorizontalAlignment"
+                        Value="Left"/>
+                <Setter Property="Margin"
+                        Value="0 2 0 0"/>
+                <Setter Property="FontFamily"
+                        Value="{StaticResource pwsFont}"/>
+            </Style>
+
+            <Style x:Key="pwsButton"
+                   TargetType="{x:Type Button}"
+                   BasedOn="{StaticResource MaterialDesignFlatMidBgButton}">
+                <Setter Property="Foreground"
+                        Value="White"/>
+                <Setter Property="FontFamily"
+                        Value="{StaticResource pwsFont}"/>
+                <Setter Property="Margin"
+                        Value="0 10 0 0"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

@@ -17,17 +17,19 @@
 
             await Task.Run(async () => 
             {
-                List<DbProduct> a = await _context.Product.ToListAsync();
-                for (int i = 0; i < a.Count; i++)
+                List<DbProduct> product = await _context.Product.ToListAsync();
+                List<DbPName> pnames = await _pnamecontext.PName.ToListAsync();
+                List<DbPManufacturer> pmanufactures = await _pmanufacturercontext.PManufacturer.ToListAsync();
+                for (int i = 0; i < product.Count; i++)
                 {
                     products.Add(new Product
                     {
-                        Image = a[i].ProductPhoto == string.Empty ? "picture.png" : a[i].ProductPhoto,
-                        Title = await Task.Run(async () => (await _pnamecontext.PName.FindAsync(a[i].ProductName)).ProductName),
-                        Description = a[i].ProductDescription,
-                        Manufacturer = await Task.Run(async () => (await _pmanufacturercontext.PManufacturer.FindAsync(a[i].ProductManufacturer)).ProductManufacturer),
-                        Price = a[i].ProductCost,
-                        Discount = a[i].ProductDiscountAmount
+                        Image = product[i].ProductPhoto == string.Empty ? "picture.png" : product[i].ProductPhoto,
+                        Title = pnames.Find(pn => pn.PNameID == product[i].ProductName).ProductName,
+                        Description = product[i].ProductDescription,
+                        Manufacturer = pmanufactures.Find(pm => pm.PManufacturerID == product[i].ProductManufacturer).ProductManufacturer,
+                        Price = product[i].ProductCost,
+                        Discount = product[i].ProductDiscountAmount
                     });
                 }
             });
