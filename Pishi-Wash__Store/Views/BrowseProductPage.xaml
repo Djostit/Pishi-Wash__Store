@@ -20,9 +20,9 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
@@ -76,28 +76,38 @@
 
         <Grid Grid.Row="1">
             <ListView FontFamily="{StaticResource pwsFont}"
-                      ItemsSource="{Binding Products}">
+                      ItemsSource="{Binding Products}"
+                      HorizontalContentAlignment="Stretch"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden">
                 
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel Orientation="Vertical"/>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
 
-                <ListView.DataContext>
+                <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Background="{StaticResource pwsSecondaryBg}">
-                            <Grid>
+                        <materialDesign:Card Background="{StaticResource pwsSecondaryBg}"
+                                             Padding="8"
+                                             HorizontalContentAlignment="Stretch">
+                            <Grid HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0"/>
+                                <Image Grid.Column="0"
+                                       Source="{Binding DisplayedImage}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Width="125"
+                                       Height="125"/>
 
-                                <Grid Grid.Column="1">
+                                <Grid Grid.Column="1"
+                                      VerticalAlignment="Center">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
@@ -106,18 +116,24 @@
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Grid.Row="0"
-                                               Text="{Binding ProductName}"/>
-                                    <TextBlock Grid.Row="1"/>
-                                    <TextBlock Grid.Row="2"/>
-                                    <TextBlock Grid.Row="3"/>
+                                               FontWeight="Bold"
+                                               Text="{Binding Title}"/>
+                                    <TextBlock Grid.Row="1"
+                                               Text="{Binding Description}"/>
+                                    <TextBlock Grid.Row="2"
+                                               Text="{Binding Manufacturer}"/>
+                                    <TextBlock Grid.Row="3"
+                                               Text="{Binding Price}"/>
                                     
                                 </Grid>
 
-                                <TextBlock Grid.Column="2"/>
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding Discount}"
+                                           VerticalAlignment="Center"/>
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
-                </ListView.DataContext>
+                </ListView.ItemTemplate>
             </ListView>
         </Grid>
     </Grid>

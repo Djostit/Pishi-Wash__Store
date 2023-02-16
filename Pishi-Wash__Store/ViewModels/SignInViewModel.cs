@@ -23,18 +23,12 @@ namespace Pishi_Wash__Store.ViewModels
             {
                 if (await _userService.AuthorizationAsync(Username, Password))
                 {
-                    await Application.Current.Dispatcher.InvokeAsync(async () => // Только часть метода должна находиться в потоке пользовательского интерфейса.
-                    {
-                        ErrorMessageButton = string.Empty;
-                        _pageService.ChangePage(new BrowseProductPage());
-                    });
+                    ErrorMessageButton = string.Empty;
+                    await Application.Current.Dispatcher.InvokeAsync(async() => _pageService.ChangePage(new BrowseProductPage()));
                 }
                 else
                 {
-                    await Application.Current.Dispatcher.InvokeAsync(async () =>
-                    {
-                        ErrorMessageButton = "Неверный логин или пароль";
-                    });
+                    ErrorMessageButton = "Неверный логин или пароль";
                 }
             });
         }, bool() => 
@@ -52,13 +46,7 @@ namespace Pishi_Wash__Store.ViewModels
             if (ErrorMessage.Equals(string.Empty))
                 return true; return false;
         });
-        public DelegateCommand SignUpCommand => new(() =>
-        {
-            _pageService.ChangePage(new SignUpPage());
-        });
-        public DelegateCommand SignInLaterCommand => new(() => 
-        { 
-            _pageService.ChangePage(new BrowseProductPage()); 
-        });
+        public DelegateCommand SignUpCommand => new(() => _pageService.ChangePage(new SignUpPage()));
+        public DelegateCommand SignInLaterCommand => new(() => _pageService.ChangePage(new BrowseProductPage()));
     }
 }

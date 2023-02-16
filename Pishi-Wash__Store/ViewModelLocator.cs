@@ -36,6 +36,18 @@
                 options.UseMySql(conn, ServerVersion.AutoDetect(conn));
             });
 
+            services.AddDbContext<PNameContext>(options =>
+            {
+                var conn = Configuration.GetConnectionString("DefaultConnection");
+                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+            });
+
+            services.AddDbContext<PManufacturerContext>(options =>
+            {
+                var conn = Configuration.GetConnectionString("DefaultConnection");
+                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+            });
+
             #endregion
 
             #region Services
