@@ -2,8 +2,8 @@
 {
     public class UserService
     {
-        private readonly UserContext _context;
-        public UserService(UserContext context)
+        private readonly DataContext _context;
+        public UserService(DataContext context)
         {
             _context = context;
         }

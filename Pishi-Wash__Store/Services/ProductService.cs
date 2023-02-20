@@ -2,14 +2,10 @@
 {
     public class ProductService
     {
-        private readonly ProductContext _context;
-        private readonly PNameContext _pnamecontext;
-        private readonly PManufacturerContext _pmanufacturercontext;
-        public ProductService(ProductContext context, PNameContext pnamecontext, PManufacturerContext pmanufacturercontext)
+        private readonly DataContext _context;
+        public ProductService(DataContext context)
         {
             _context = context;
-            _pnamecontext = pnamecontext;
-            _pmanufacturercontext = pmanufacturercontext;
         }
         public async Task<List<Product>> GetProducts()
         {
@@ -17,21 +13,26 @@
 
             await Task.Run(async () => 
             {
-                List<DbProduct> product = await _context.Product.ToListAsync();
-                List<DbPName> pnames = await _pnamecontext.PName.ToListAsync();
-                List<DbPManufacturer> pmanufactures = await _pmanufacturercontext.PManufacturer.ToListAsync();
-                for (int i = 0; i < product.Count; i++)
+                try
                 {
-                    products.Add(new Product
+                    List<DbProduct> product = await _context.Product.ToListAsync();
+                    List<DbPName> pnames = await _context.PName.ToListAsync();
+                    List<DbPManufacturer> pmanufactures = await _context.PManufacturer.ToListAsync();
+
+                    foreach (var item in product)
                     {
-                        Image = product[i].ProductPhoto == string.Empty ? "picture.png" : product[i].ProductPhoto,
-                        Title = pnames.Find(pn => pn.PNameID == product[i].ProductName).ProductName,
-                        Description = product[i].ProductDescription,
-                        Manufacturer = pmanufactures.Find(pm => pm.PManufacturerID == product[i].ProductManufacturer).ProductManufacturer,
-                        Price = product[i].ProductCost,
-                        Discount = product[i].ProductDiscountAmount
-                    });
+                        products.Add(new Product
+                        {
+                            Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
+                            Title = pnames.SingleOrDefault(pn => pn.PNameID == item.ProductName).ProductName,
+                            Description = item.ProductDescription,
+                            Manufacturer = pmanufactures.SingleOrDefault(pm => pm.PManufacturerID == item.ProductManufacturer).ProductManufacturer,
+                            Price = item.ProductCost,
+                            Discount = item.ProductDiscountAmount
+                        });
+                    }
                 }
+                catch { }
             });
             return products;
         }

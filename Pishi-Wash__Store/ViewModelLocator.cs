@@ -24,29 +24,11 @@
 
             #region Connection
 
-            services.AddDbContext<UserContext>(options =>
+            services.AddDbContext<DataContext>(options =>
             {
                 var conn = Configuration.GetConnectionString("DefaultConnection");
                 options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            });
-
-            services.AddDbContext<ProductContext>(options =>
-            {
-                var conn = Configuration.GetConnectionString("DefaultConnection");
-                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            });
-
-            services.AddDbContext<PNameContext>(options =>
-            {
-                var conn = Configuration.GetConnectionString("DefaultConnection");
-                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            });
-
-            services.AddDbContext<PManufacturerContext>(options =>
-            {
-                var conn = Configuration.GetConnectionString("DefaultConnection");
-                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            });
+            }, ServiceLifetime.Transient);
 
             #endregion
 
