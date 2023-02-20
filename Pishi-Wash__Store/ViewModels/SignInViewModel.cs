@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using MaterialDesignThemes.Wpf;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Threading;
 using System.Windows;
 
 namespace Pishi_Wash__Store.ViewModels
@@ -11,7 +13,6 @@ namespace Pishi_Wash__Store.ViewModels
         public string Password { get; set; }
         public string ErrorMessage { get; set; }
         public string ErrorMessageButton { get; set; }
-        public string cAPTCHA { get; set; }
         public SignInViewModel(UserService userService, PageService pageService)
         {
             _userService = userService;
@@ -27,9 +28,7 @@ namespace Pishi_Wash__Store.ViewModels
                     await Application.Current.Dispatcher.InvokeAsync(async() => _pageService.ChangePage(new BrowseProductPage()));
                 }
                 else
-                {
                     ErrorMessageButton = "Неверный логин или пароль";
-                }
             });
         }, bool() => 
         {
@@ -39,10 +38,9 @@ namespace Pishi_Wash__Store.ViewModels
                 ErrorMessage = "Пустые поля";
                 ErrorMessageButton = string.Empty;
             }
-            else 
-            {
+            else
                 ErrorMessage = string.Empty;
-            }
+
             if (ErrorMessage.Equals(string.Empty))
                 return true; return false;
         });

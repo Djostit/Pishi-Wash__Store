@@ -18,9 +18,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
+
         <Grid Grid.Column="1"
               VerticalAlignment="Center">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -42,12 +44,12 @@
                      Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource pwsTextBox}"
                      materialDesign:HintAssist.Hint="Логин"/>
-            
+
             <PasswordBox Grid.Row="3"
                      materialDesign:PasswordBoxAssist.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource pwsPasswordBox}"
                      materialDesign:HintAssist.Hint="Пароль"/>
-            
+
             <TextBlock Grid.Row="4"
                        Style="{StaticResource pwsTextBlockError}"
                        Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -91,4 +93,32 @@
             </StackPanel>
         </Grid>
     </Grid>
+
+
+
+    <!--<materialDesign:DialogHost>
+        <Button Grid.Row="8"
+                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+    Width="128"
+    Content="PASS VIEW">
+            <Button.CommandParameter>
+                <StackPanel
+        Margin="16">
+                    <ProgressBar
+          Style="{StaticResource MaterialDesignCircularProgressBar}"
+          HorizontalAlignment="Center"
+          Margin="16"
+          IsIndeterminate="True"
+          Value="0" />
+                    <Button
+          Style="{StaticResource MaterialDesignFlatButton}"
+          IsCancel="True"
+          Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+          CommandParameter="Sample2Cancel"
+          HorizontalAlignment="Center"
+          Content="CANCEL" />
+                </StackPanel>
+            </Button.CommandParameter>
+        </Button>
+    </materialDesign:DialogHost>-->
 </Page>

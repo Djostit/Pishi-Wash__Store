@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
@@ -70,17 +67,7 @@ namespace Pishi_Wash__Store.ViewModels
                     Products = actualProduct.Where(p => p.Title.ToLower().Contains(Search.ToLower())).ToList();
 
                 if(!string.IsNullOrEmpty(SelectedSort))
-                {
-                    switch (SelectedSort)
-                    {
-                        case "По возрастанию":
-                            Products = Products.OrderBy(p => p.Price).ToList();
-                            break;
-                        case "По убыванию":
-                            Products = Products.OrderByDescending(p => p.Price).ToList();
-                            break;
-                    }
-                }
+                    OnSortChanged();
             });
         }
         public BrowseProductViewModel(PageService pageService, ProductService productService)

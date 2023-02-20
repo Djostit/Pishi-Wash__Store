@@ -47,6 +47,10 @@
                       Style="{StaticResource pwsComboBox}"
                       ItemsSource="{Binding Filters}"
                       SelectedItem="{Binding SelectedFilter}"/>
+            <TextBlock Grid.Column="3"
+                       Text="123"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Left"/>
             <Menu Grid.Column="3"
                   Margin="5"
                   HorizontalAlignment="Right">
