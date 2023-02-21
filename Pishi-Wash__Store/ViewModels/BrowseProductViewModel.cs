@@ -8,6 +8,9 @@
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-9.99%", "10-14.99%", "15% и более"};
         public List<Product> Products { get; set; }
         public string FullName { get; set; } = Global.CurrentUser == null ? "Гость" : $"{Global.CurrentUser.UserSurname} {Global.CurrentUser.UserName} {Global.CurrentUser.UserPatronymic}";
+        public int? MaxRecords { get; set; }
+        public int? Records { get; set; }
+
         public string SelectedSort
         {
             get { return GetValue<string>(); }
@@ -33,6 +36,7 @@
         async void OnFilterChanged()
         {
             var actualProduct = await _productService.GetProducts();
+            MaxRecords = actualProduct.Count;
             switch (SelectedFilter) 
             {
                 case "Все диапазоны":
@@ -48,6 +52,7 @@
                     Products = actualProduct.Where(p => p.Discount < 15 && p.Discount > 14).ToList();
                     break;
             }
+            Records = Products.Count;
         }
         public string Search
         {
@@ -58,6 +63,7 @@
         async void OnSearchChanged()
         {
             var actualProduct = await _productService.GetProducts();
+            MaxRecords = actualProduct.Count;
             await Task.Delay(1000);
             await Task.Run(() => 
             {
@@ -65,8 +71,8 @@
                     Products = actualProduct;
                 else
                     Products = actualProduct.Where(p => p.Title.ToLower().Contains(Search.ToLower())).ToList();
-
-                if(!string.IsNullOrEmpty(SelectedSort))
+                Records = Products.Count;
+                if (!string.IsNullOrEmpty(SelectedSort))
                     OnSortChanged();
             });
         }
@@ -74,9 +80,13 @@
         {
             _pageService = pageService;
             _productService = productService;
-            Task.Run(async () => Products = await _productService.GetProducts())
-                                 .WaitAsync(TimeSpan.FromMilliseconds(10))
-                                 .ConfigureAwait(false);
+            Task.Run(async () =>
+            { 
+                Products = await _productService.GetProducts();
+                MaxRecords = Products.Count;
+                Records = MaxRecords;
+            }).WaitAsync(TimeSpan.FromMilliseconds(10))
+            .ConfigureAwait(false);
         }
 
         public DelegateCommand SignOutCommand => new(() => 

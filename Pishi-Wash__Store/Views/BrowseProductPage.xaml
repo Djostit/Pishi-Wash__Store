@@ -48,9 +48,17 @@
                       ItemsSource="{Binding Filters}"
                       SelectedItem="{Binding SelectedFilter}"/>
             <TextBlock Grid.Column="3"
-                       Text="123"
                        VerticalAlignment="Bottom"
-                       HorizontalAlignment="Left"/>
+                       TextWrapping="Wrap"
+                       FontFamily="{StaticResource pwsFont}"
+                       HorizontalAlignment="Left">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} из {1}">
+                        <Binding Path="Records"/>
+                        <Binding Path="MaxRecords"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <Menu Grid.Column="3"
                   Margin="5"
                   HorizontalAlignment="Right">
