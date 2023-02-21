@@ -26,8 +26,16 @@
 
             services.AddDbContext<DataContext>(options =>
             {
-                var conn = Configuration.GetConnectionString("DefaultConnection");
-                options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                try 
+                {
+                    var conn = Configuration.GetConnectionString("LocalConnection");
+                    options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                }
+                catch (MySqlConnector.MySqlException)
+                {
+                    var conn = Configuration.GetConnectionString("RemoteConnection");
+                    options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                }
             }, ServiceLifetime.Transient);
 
             #endregion

@@ -91,6 +91,12 @@
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Добавить"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"/>

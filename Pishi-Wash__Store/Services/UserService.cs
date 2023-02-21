@@ -22,6 +22,7 @@
                     UserPatronymic = user.UserPatronymic, 
                     UserRole = user.UserRole 
                 };
+
                 return true;
             }
             return false;
