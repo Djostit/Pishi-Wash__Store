@@ -10,30 +10,26 @@
         public async Task<List<Product>> GetProducts()
         {
             List<Product> products = new();
-
-            await Task.Run(async () => 
+            try
             {
-                try
-                {
-                    List<DbProduct> product = await _context.Product.ToListAsync();
-                    List<DbPName> pnames = await _context.PName.ToListAsync();
-                    List<DbPManufacturer> pmanufactures = await _context.PManufacturer.ToListAsync();
+                List<DbProduct> product = await _context.Product.AsNoTracking().ToListAsync();
+                List<DbPName> pnames = await _context.PName.AsNoTracking().ToListAsync();
+                List<DbPManufacturer> pmanufactures = await _context.PManufacturer.AsNoTracking().ToListAsync();
 
-                    foreach (var item in product)
+                foreach (var item in product)
+                {
+                    products.Add(new Product
                     {
-                        products.Add(new Product
-                        {
-                            Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
-                            Title = pnames.SingleOrDefault(pn => pn.PNameID == item.ProductName).ProductName,
-                            Description = item.ProductDescription,
-                            Manufacturer = pmanufactures.SingleOrDefault(pm => pm.PManufacturerID == item.ProductManufacturer).ProductManufacturer,
-                            Price = item.ProductCost,
-                            Discount = item.ProductDiscountAmount
-                        });
-                    }
+                        Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
+                        Title = pnames.SingleOrDefault(pn => pn.PNameID == item.ProductName).ProductName,
+                        Description = item.ProductDescription,
+                        Manufacturer = pmanufactures.SingleOrDefault(pm => pm.PManufacturerID == item.ProductManufacturer).ProductManufacturer,
+                        Price = item.ProductCost,
+                        Discount = item.ProductDiscountAmount
+                    });
                 }
-                catch { }
-            });
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
             return products;
         }
     }

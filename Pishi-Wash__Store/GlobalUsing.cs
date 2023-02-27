@@ -19,3 +19,6 @@ global using Pishi_Wash__Store.ViewModels;
 global using System.IO;
 global using Pishi_Wash__Store.Assets;
 global using Pishi_Wash__Store.Models.DbContext;
+global using Microsoft.EntityFrameworkCore.Metadata.Internal;
+global using System.Threading;
+global using System.Windows;

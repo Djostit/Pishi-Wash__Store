@@ -33,8 +33,16 @@
                 }
                 catch (MySqlConnector.MySqlException)
                 {
-                    var conn = Configuration.GetConnectionString("RemoteConnection");
-                    options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                    try 
+                    {
+                        var conn = Configuration.GetConnectionString("RemoteConnection");
+                        options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                    }
+                    catch (MySqlConnector.MySqlException)
+                    {
+                        Debug.WriteLine("Ошибка.");
+                    }
+                    
                 }
             }, ServiceLifetime.Transient);
 

@@ -1,9 +1,4 @@
-﻿using MaterialDesignThemes.Wpf;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Threading;
-using System.Windows;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class SignInViewModel : BindableBase
     {

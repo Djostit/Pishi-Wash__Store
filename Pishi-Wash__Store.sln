@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pishi-Wash__Store", "Pishi-Wash__Store\Pishi-Wash__Store.csproj", "{3BC8E5F3-8549-415B-8519-E264F493FB63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Write and Erase", "Pishi-Wash__Store\Write and Erase.csproj", "{3BC8E5F3-8549-415B-8519-E264F493FB63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

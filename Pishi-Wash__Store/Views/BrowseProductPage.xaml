@@ -23,7 +23,8 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"
                      Margin="5"
@@ -59,7 +60,7 @@
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
-            <Menu Grid.Column="3"
+            <Menu Grid.Column="4"
                   Margin="5"
                   HorizontalAlignment="Right">
                 <MenuItem FontFamily="{StaticResource pwsFont}">
