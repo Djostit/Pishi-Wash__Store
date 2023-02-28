@@ -40,7 +40,7 @@
                     }
                     catch (MySqlConnector.MySqlException)
                     {
-                        Debug.WriteLine("Ошибка.");
+                        Application.Current.Shutdown();
                     }
                     
                 }
