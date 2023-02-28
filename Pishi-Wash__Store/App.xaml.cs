@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
-namespace Pishi_Wash__Store
+﻿namespace Pishi_Wash__Store
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -18,5 +10,10 @@ namespace Pishi_Wash__Store
             base.OnStartup(e);
             ViewModelLocator.Init();
         }
+        //protected override void OnExit(ExitEventArgs e)
+        //{
+        //    UserSetting.Default.Save();
+        //    base.OnExit(e);
+        //}
     }
 }

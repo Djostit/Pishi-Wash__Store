@@ -7,12 +7,12 @@
         {
             _pageService = pageService;
         }
-        public AsyncCommand SignUpCommand => new(async () => 
+        public AsyncCommand SignUpCommand => new(async () =>
         {
             await Task.Delay(1440);
             Debug.WriteLine("Проверка регистрации");
         });
-        public DelegateCommand SignInCommand => new(() => 
+        public DelegateCommand SignInCommand => new(() =>
         {
             _pageService.ChangePage(new SingInPage());
         });

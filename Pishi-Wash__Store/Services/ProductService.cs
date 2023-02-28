@@ -21,7 +21,7 @@
 
 
                 foreach (var item in product)
-                {   
+                {
                     products.Add(new Product
                     {
                         Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,

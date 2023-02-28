@@ -1,6 +1,4 @@
-﻿using DevExpress.Mvvm.Native;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
@@ -9,7 +7,7 @@ namespace Pishi_Wash__Store.ViewModels
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-9.99%", "10-14.99%", "15% и более" };
         public List<Product> Products { get; set; }
-        public string FullName { get; set; } = Global.CurrentUser == null ? "Гость" : $"{Global.CurrentUser.UserSurname} {Global.CurrentUser.UserName} {Global.CurrentUser.UserPatronymic}";
+        public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public int? MaxRecords { get; set; } = 0;
         public int? Records { get; set; } = 0;
 
@@ -49,8 +47,8 @@ namespace Pishi_Wash__Store.ViewModels
                         break;
                 }
             }
-            
-            if(!string.IsNullOrEmpty(Search))
+
+            if (!string.IsNullOrEmpty(Search))
                 currentProduct = currentProduct.Where(p => p.Title.ToLower().Contains(Search.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(SelectedSort))
@@ -64,7 +62,7 @@ namespace Pishi_Wash__Store.ViewModels
                         currentProduct = currentProduct.OrderByDescending(p => p.Price).ToList();
                         break;
                 }
-            }    
+            }
 
             Records = currentProduct.Count;
             Products = currentProduct;
@@ -83,10 +81,14 @@ namespace Pishi_Wash__Store.ViewModels
             SelectedFilter = "Все диапазоны";
         }
 
-        public DelegateCommand SignOutCommand => new(() => 
-        { 
-            Global.CurrentUser = null; 
-            _pageService.ChangePage(new SingInPage()); 
+        public DelegateCommand SignOutCommand => new(() =>
+        {
+            UserSetting.Default.Id = 0;
+            UserSetting.Default.UserName = string.Empty;
+            UserSetting.Default.UserSurname = string.Empty;
+            UserSetting.Default.UserPatronymic = string.Empty;
+            UserSetting.Default.UserRole = 0;
+            _pageService.ChangePage(new SingInPage());
         });
     }
 }

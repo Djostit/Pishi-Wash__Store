@@ -13,22 +13,22 @@
             _userService = userService;
             _pageService = pageService;
         }
-        public AsyncCommand SignInCommand => new(async () => 
+        public AsyncCommand SignInCommand => new(async () =>
         {
             await Task.Run(async () =>
             {
                 if (await _userService.AuthorizationAsync(Username, Password))
                 {
                     ErrorMessageButton = string.Empty;
-                    await Application.Current.Dispatcher.InvokeAsync(async() => _pageService.ChangePage(new BrowseProductPage()));
+                    await Application.Current.Dispatcher.InvokeAsync(async () => _pageService.ChangePage(new BrowseProductPage()));
                 }
                 else
                     ErrorMessageButton = "Неверный логин или пароль";
             });
-        }, bool() => 
+        }, bool () =>
         {
-            if(string.IsNullOrWhiteSpace(Username)
-                || string.IsNullOrWhiteSpace(Password)) 
+            if (string.IsNullOrWhiteSpace(Username)
+                || string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessage = "Пустые поля";
                 ErrorMessageButton = string.Empty;

@@ -26,23 +26,23 @@
 
             services.AddDbContext<DataContext>(options =>
             {
-                try 
+                try
                 {
                     var conn = Configuration.GetConnectionString("LocalConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)
                 {
-                    try 
+                    try
                     {
                         var conn = Configuration.GetConnectionString("RemoteConnection");
                         options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                     }
                     catch (MySqlConnector.MySqlException)
                     {
-                        Application.Current.Shutdown();
+                        Debug.WriteLine("Ошибка.");
                     }
-                    
+
                 }
             }, ServiceLifetime.Transient);
 
@@ -55,7 +55,7 @@
             services.AddSingleton<ProductService>();
 
             #endregion
-            
+
             _provider = services.BuildServiceProvider();
             foreach (var service in services)
             {

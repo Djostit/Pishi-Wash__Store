@@ -14,14 +14,11 @@
                 return false;
             if (user.UserPassword.Equals(password))
             {
-                Global.CurrentUser = new User 
-                { 
-                    Id = user.UserID, 
-                    UserName = user.UserName, 
-                    UserSurname = user.UserSurname, 
-                    UserPatronymic = user.UserPatronymic, 
-                    UserRole = user.UserRole 
-                };
+                UserSetting.Default.Id = user.UserID;
+                UserSetting.Default.UserName = user.UserName;
+                UserSetting.Default.UserSurname = user.UserSurname;
+                UserSetting.Default.UserPatronymic = user.UserPatronymic;
+                UserSetting.Default.UserRole = user.UserRole;
 
                 return true;
             }

@@ -12,6 +12,6 @@
         public string Manufacturer { get; set; }
         public float Price { get; set; }
         public int Discount { get; set; }
-        
+
     }
 }

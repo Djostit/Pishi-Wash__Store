@@ -1,6 +1,4 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace Pishi_Wash__Store.Models.DbContext
+﻿namespace Pishi_Wash__Store.Models.DbContext
 {
     public class DbProduct
     {

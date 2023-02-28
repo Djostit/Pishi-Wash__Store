@@ -93,4 +93,19 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\UserSetting.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserSetting.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\UserSetting.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>UserSetting.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
 </Project>
