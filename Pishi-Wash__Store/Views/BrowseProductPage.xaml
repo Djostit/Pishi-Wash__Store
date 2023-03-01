@@ -89,12 +89,14 @@
         <Grid Grid.Row="1">
             <ListView FontFamily="{StaticResource pwsFont}"
                       ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Добавить"/>
+                        <MenuItem Header="Добавить"
+                                  Command="{Binding TestCommand}"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
 
@@ -147,7 +149,7 @@
                                 </Grid>
 
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding Discount}"
+                                           Text="{Binding Discount, StringFormat={}Скидка: {0}%}"
                                            VerticalAlignment="Center"/>
                             </Grid>
                         </materialDesign:Card>

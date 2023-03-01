@@ -5,8 +5,9 @@
         private readonly PageService _pageService;
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
-        public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-9.99%", "10-14.99%", "15% и более" };
+        public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-5%", "5-9%", "9% и более" };
         public List<Product> Products { get; set; }
+        public Product SelectedProduct { get; set; }    
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public int? MaxRecords { get; set; } = 0;
         public int? Records { get; set; } = 0;
@@ -36,14 +37,14 @@
             {
                 switch (SelectedFilter)
                 {
-                    case "0-9.99%":
-                        currentProduct = currentProduct.Where(p => p.Discount > 0 && p.Discount < 10).ToList();
+                    case "0-5%":
+                        currentProduct = currentProduct.Where(p => p.Discount > 0 && p.Discount < 5).ToList();
                         break;
-                    case "10-14.99%":
-                        currentProduct = currentProduct.Where(p => p.Discount > 10 && p.Discount < 15).ToList();
+                    case "5-9%":
+                        currentProduct = currentProduct.Where(p => p.Discount >= 5 && p.Discount < 9).ToList();
                         break;
-                    case "15% и более":
-                        currentProduct = currentProduct.Where(p => p.Discount > 15).ToList();
+                    case "9% и более":
+                        currentProduct = currentProduct.Where(p => p.Discount >= 9).ToList();
                         break;
                 }
             }
@@ -89,6 +90,10 @@
             UserSetting.Default.UserPatronymic = string.Empty;
             UserSetting.Default.UserRole = 0;
             _pageService.ChangePage(new SingInPage());
+        });
+        public DelegateCommand TestCommand => new(() => 
+        {
+            Debug.WriteLine(SelectedProduct.Title);
         });
     }
 }
