@@ -1,39 +1,37 @@
-﻿namespace Pishi_Wash__Store.Services
+﻿using Pishi_Wash__Store.Data.Db;
+
+namespace Pishi_Wash__Store.Services
 {
     public class ProductService
     {
-        private readonly DataContext _context;
-        public ProductService(DataContext context)
+        private readonly TradeContext _tradeContext;
+        public ProductService(TradeContext tradeContext)
         {
-            _context = context;
+            _tradeContext = tradeContext;
         }
-        public async Task<List<Product>> GetProducts()
+
+        public async Task<List<Models.Product>> GetProducts()
         {
-            List<Product> products = new();
-            try
+            List<Models.Product> products = new();
+            var product = await _tradeContext.Products.ToListAsync();
+            await _tradeContext.Pnames.ToListAsync();
+            await _tradeContext.Pmanufacturers.ToListAsync();
+            await Task.Run(() =>
             {
-                List<DbProduct> product = await _context.Product.AsNoTracking().ToListAsync();
-                await _context.SaveChangesAsync();
-                List<DbPName> pnames = await _context.PName.AsNoTracking().ToListAsync();
-                await _context.SaveChangesAsync();
-                List<DbPManufacturer> pmanufactures = await _context.PManufacturer.AsNoTracking().ToListAsync();
-                await _context.SaveChangesAsync();
-
-
                 foreach (var item in product)
                 {
-                    products.Add(new Product
+                    products.Add(new Models.Product
                     {
                         Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
-                        Title = pnames.First(pn => pn.PNameID == item.ProductName).ProductName,
+                        Title = item.ProductNameNavigation.ProductName,
                         Description = item.ProductDescription,
-                        Manufacturer = pmanufactures.First(pm => pm.PManufacturerID == item.ProductManufacturer).ProductManufacturer,
+                        Manufacturer = item.ProductManufacturerNavigation.ProductManufacturer,
                         Price = item.ProductCost,
-                        Discount = item.ProductDiscountAmount
+                        Discount = item.ProductDiscountAmount.Value,
+                        Article = item.ProductArticleNumber
                     });
                 }
-            }
-            catch (Exception ex) { Debug.WriteLine(ex); }
+            });
             return products;
         }
     }

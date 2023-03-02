@@ -6,6 +6,7 @@
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-5%", "5-9%", "9% и более" };
+        public bool IsEnabledCart { get; set; }
         public List<Product> Products { get; set; }
         public Product SelectedProduct { get; set; }    
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
@@ -68,17 +69,24 @@
             Records = currentProduct.Count;
             Products = currentProduct;
         }
+        private void CheckEnabled()
+        {
+            if (Global.CurrentCart.Any(c => c.ArticleName != null))
+                IsEnabledCart = true;
+            else
+                IsEnabledCart = false;
+
+            foreach (var item in Global.CurrentCart)
+            {
+                Debug.WriteLine(item.ArticleName + " s " + item.Count);
+
+            }
+        }
         public BrowseProductViewModel(PageService pageService, ProductService productService)
         {
             _pageService = pageService;
             _productService = productService;
-            Task.Run(async () =>
-            {
-                Products = await _productService.GetProducts();
-                MaxRecords = Products.Count;
-                Records = MaxRecords;
-            }).WaitAsync(TimeSpan.FromSeconds(1))
-            .ConfigureAwait(false);
+            CheckEnabled();
             SelectedFilter = "Все диапазоны";
         }
 
@@ -89,11 +97,30 @@
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
             UserSetting.Default.UserRole = 0;
+            Global.CurrentCart.Clear();
             _pageService.ChangePage(new SingInPage());
         });
         public DelegateCommand TestCommand => new(() => 
         {
-            Debug.WriteLine(SelectedProduct.Title);
+            var test = Global.CurrentCart.SingleOrDefault(c => c.ArticleName.Equals(SelectedProduct.Article));
+            if(test == null)
+            {
+                Global.CurrentCart.Add(new Cart 
+                { 
+                    ArticleName = SelectedProduct.Article, 
+                    Count = 1
+                });
+            }
+            else
+            {
+                test.Count++;
+                Global.CurrentCart[Global.CurrentCart.FindIndex(c => c.ArticleName.Equals(test.ArticleName))] = test;
+            }
+            CheckEnabled();
+        });
+        public DelegateCommand CartCommand => new(() => 
+        {
+            _pageService.ChangePage(new CartPage());
         });
     }
 }

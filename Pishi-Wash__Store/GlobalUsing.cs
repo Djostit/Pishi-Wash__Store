@@ -21,3 +21,8 @@ global using System.Linq;
 global using System.Threading.Tasks;
 global using System.Windows;
 global using System.Windows.Controls;
+global using System.Globalization;
+global using System.Windows.Data;
+global using System.Windows.Media;
+global using Pishi_Wash__Store.Assets;
+

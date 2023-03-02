@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Pishi_Wash__Store"
+             xmlns:converterts="clr-namespace:Pishi_Wash__Store.Assets.Converters"
              StartupUri="Views/mWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -12,6 +13,7 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <local:ViewModelLocator x:Key="ViewModelLocator"/>
+            <converterts:StringToBrushConverter x:Key="StringToBrushConverter"/>
 
             <Color x:Key="pwsPrimaryColor">#ffffff</Color>
             <Color x:Key="pwsSecondaryColor">#76e383</Color>
