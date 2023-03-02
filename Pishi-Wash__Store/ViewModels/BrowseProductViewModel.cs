@@ -31,7 +31,8 @@
 
         private async void UpdateProduct()
         {
-            var currentProduct = await _productService.GetProducts();
+            //var currentProduct = await _productService.GetProducts();
+            var currentProduct = await Task.Run(_productService.GetProducts);
             MaxRecords = currentProduct.Count;
 
             if (!string.IsNullOrEmpty(SelectedFilter))

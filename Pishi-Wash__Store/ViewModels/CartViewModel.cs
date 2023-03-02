@@ -3,9 +3,14 @@
     public class CartViewModel : BindableBase
     {
         private readonly PageService _pageService;
-        public CartViewModel(PageService pageService)
+        private readonly ProductService _productService;
+        public List<Product> Products { get; set; }
+        public Product SelectedProduct { get; set; }
+        public CartViewModel(PageService pageService, ProductService productService)
         {
             _pageService = pageService;
+            _productService = productService;
+            Task.Run(async () => Products = await _productService.GetCart());
         }
         public DelegateCommand ReturnBackCommand => new(() =>
         {
@@ -20,6 +25,10 @@
             UserSetting.Default.UserRole = 0;
             Global.CurrentCart.Clear();
             _pageService.ChangePage(new SingInPage());
+        });
+        public DelegateCommand RemoveCommand => new(() => 
+        {
+            
         });
     }
 }

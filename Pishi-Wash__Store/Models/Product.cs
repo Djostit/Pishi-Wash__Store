@@ -13,6 +13,7 @@
         public float Price { get; set; }
         public int Discount { get; set; }
         public string Article { get; set; }
+        public int Count { get; set; }
 
     }
 }

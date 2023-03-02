@@ -34,5 +34,21 @@ namespace Pishi_Wash__Store.Services
             });
             return products;
         }
+        public async Task<List<Models.Product>> GetCart()
+        {
+            List<Models.Product> a = new();
+            var b = await GetProducts();
+
+            foreach (var item in Global.CurrentCart)
+            {
+                var product = b.SingleOrDefault(c => c.Article.Equals(item.ArticleName));
+                if (product != null)
+                {
+                    product.Count = Global.CurrentCart.Single(a => a.ArticleName.Equals(product.Article)).Count;
+                    a.Add(product); 
+                }
+            }
+            return a;
+        }
     }
 }
