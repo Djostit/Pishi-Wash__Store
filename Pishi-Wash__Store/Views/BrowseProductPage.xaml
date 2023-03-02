@@ -66,7 +66,8 @@
                 <MenuItem FontFamily="{StaticResource pwsFont}">
                     <MenuItem.Header>
                         <Image Source="\Resources\Image\logo.png"
-                               Stretch="UniformToFill"/>
+                               Stretch="UniformToFill"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Header>
                     <MenuItem Foreground="White"
                               Header="{Binding FullName}"
@@ -78,6 +79,7 @@
                     
                     <MenuItem Header="Корзина"
                               Command="{Binding CartCommand}"
+                              Foreground="White"
                               IsEnabled="{Binding IsEnabledCart, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
@@ -85,7 +87,7 @@
 
                     <MenuItem Header="Выйти"
                               Command="{Binding SignOutCommand}"
-                              FontSize="14"/>
+                              Foreground="White"/>
 
                 </MenuItem>
                 <Menu.Resources>
@@ -96,7 +98,7 @@
 
         <Grid Grid.Row="1">
             <ListView FontFamily="{StaticResource pwsFont}"
-                      ItemsSource="{Binding Products}"
+                      ItemsSource="{Binding Products,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -104,7 +106,7 @@
                 <ListView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Добавить"
-                                  Command="{Binding TestCommand}"/>
+                                  Command="{Binding AddToCartCommand}"/>
                     </ContextMenu>
                 </ListView.ContextMenu>
 
@@ -150,14 +152,17 @@
                                                Text="{Binding Description}"
                                                TextWrapping="Wrap"/>
                                     <TextBlock Grid.Row="2"
-                                               Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"/>
+                                               Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"
+                                               TextWrapping="Wrap"/>
                                     <TextBlock Grid.Row="3"
-                                               Text="{Binding Price, StringFormat={}Цена: {0} р}"/>
+                                               Text="{Binding Price, StringFormat={}Цена: {0} р}"
+                                               TextWrapping="Wrap"/>
                                     
                                 </Grid>
 
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding Discount, StringFormat={}Скидка: {0}%}"
+                                           Text="{Binding Discount, StringFormat={}Скидка: {0} %}"
+                                           TextWrapping="Wrap"
                                            VerticalAlignment="Center"/>
                             </Grid>
                         </materialDesign:Card>

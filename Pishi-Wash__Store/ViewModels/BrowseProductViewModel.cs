@@ -1,4 +1,6 @@
-﻿namespace Pishi_Wash__Store.ViewModels
+﻿using System.ComponentModel;
+
+namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
@@ -29,10 +31,19 @@
             set { SetValue(value, changedCallback: UpdateProduct); }
         }
 
+        public BrowseProductViewModel(PageService pageService, ProductService productService)
+        {
+            _pageService = pageService;
+            _productService = productService;
+            CheckEnabled();
+            SelectedFilter = "Все диапазоны";
+        }
+
+        private void CheckEnabled() => IsEnabledCart = Global.CurrentCart.Any(c => c.ArticleName != null);
+
         private async void UpdateProduct()
         {
-            //var currentProduct = await _productService.GetProducts();
-            var currentProduct = await Task.Run(_productService.GetProducts);
+            var currentProduct = await _productService.GetProducts();
             MaxRecords = currentProduct.Count;
 
             if (!string.IsNullOrEmpty(SelectedFilter))
@@ -70,41 +81,21 @@
             Records = currentProduct.Count;
             Products = currentProduct;
         }
-        private void CheckEnabled()
-        {
-            if (Global.CurrentCart.Any(c => c.ArticleName != null))
-                IsEnabledCart = true;
-            else
-                IsEnabledCart = false;
-
-            foreach (var item in Global.CurrentCart)
-            {
-                Debug.WriteLine(item.ArticleName + " s " + item.Count);
-
-            }
-        }
-        public BrowseProductViewModel(PageService pageService, ProductService productService)
-        {
-            _pageService = pageService;
-            _productService = productService;
-            CheckEnabled();
-            SelectedFilter = "Все диапазоны";
-        }
-
+        
         public DelegateCommand SignOutCommand => new(() =>
         {
             UserSetting.Default.Id = 0;
             UserSetting.Default.UserName = string.Empty;
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
-            UserSetting.Default.UserRole = 0;
+            UserSetting.Default.UserRole = string.Empty;
             Global.CurrentCart.Clear();
             _pageService.ChangePage(new SingInPage());
         });
-        public DelegateCommand TestCommand => new(() => 
+        public DelegateCommand AddToCartCommand => new(() => 
         {
-            var test = Global.CurrentCart.SingleOrDefault(c => c.ArticleName.Equals(SelectedProduct.Article));
-            if(test == null)
+            var cart = Global.CurrentCart.SingleOrDefault(c => c.ArticleName.Equals(SelectedProduct.Article));
+            if(cart == null)
             {
                 Global.CurrentCart.Add(new Cart 
                 { 
@@ -114,8 +105,8 @@
             }
             else
             {
-                test.Count++;
-                Global.CurrentCart[Global.CurrentCart.FindIndex(c => c.ArticleName.Equals(test.ArticleName))] = test;
+                cart.Count++;
+                Global.CurrentCart[Global.CurrentCart.FindIndex(c => c.ArticleName.Equals(cart.ArticleName))] = cart;
             }
             CheckEnabled();
         });

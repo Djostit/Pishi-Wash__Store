@@ -21,8 +21,15 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontFamily="{StaticResource pwsFont}"
+                       Text="{Binding OrderAmmount,StringFormat={}Итого: {0} р., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Column="1"
+                       FontFamily="{StaticResource pwsFont}"
+                       Text="{Binding DiscountAmmount,StringFormat={}Общая скидка: {0} %, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Menu Grid.Column="4"
                   Margin="5"
@@ -30,7 +37,8 @@
                 <MenuItem FontFamily="{StaticResource pwsFont}">
                     <MenuItem.Header>
                         <Image Source="\Resources\Image\logo.png"
-                               Stretch="UniformToFill"/>
+                               Stretch="UniformToFill"
+                               RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Header>
                     <MenuItem Foreground="White"
                               Header="{Binding FullName}"
@@ -40,15 +48,16 @@
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
                                    Margin="10 0 10 0"/>
 
-                    <MenuItem Header="Маганзин"
-                              Command="{Binding ReturnBackCommand}"/>
+                    <MenuItem Header="Магазин"
+                              Command="{Binding ReturnBackCommand}"
+                              Foreground="White"/>
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
                                    Margin="10 0 10 0"/>
 
                     <MenuItem Header="Выйти"
                               Command="{Binding SignOutCommand}"
-                              FontSize="14"/>
+                              Foreground="White"/>
 
                 </MenuItem>
                 <Menu.Resources>

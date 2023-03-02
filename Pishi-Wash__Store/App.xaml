@@ -87,7 +87,7 @@
 
             <Style x:Key="pwsPasswordBox"
                    TargetType="{x:Type PasswordBox}"
-                   BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}">
+                   BasedOn="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}">
                 <Setter Property="Margin"
                         Value="0 20 0 0"/>
                 <Setter Property="Foreground"

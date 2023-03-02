@@ -34,7 +34,9 @@
             </Grid.RowDefinitions>
             <Image Grid.Row="0" 
                    Source="\Resources\Image\logo.png"
-                   Height="75"/>
+                   Height="75"
+                   Stretch="Uniform"
+                   RenderOptions.BitmapScalingMode="HighQuality"/>
             <TextBlock Grid.Row="1"
                        Text="Войдите в свою учетную запись!"
                        HorizontalAlignment="Center"
@@ -43,6 +45,7 @@
             <TextBox Grid.Row="2"
                      Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource pwsTextBox}"
+                     materialDesign:TextFieldAssist.HasClearButton="True"
                      materialDesign:HintAssist.Hint="Логин"/>
 
             <PasswordBox Grid.Row="3"
