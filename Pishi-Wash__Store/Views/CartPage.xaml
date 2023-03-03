@@ -21,15 +21,25 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.5*"/>
+                <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0"
-                       FontFamily="{StaticResource pwsFont}"
-                       Text="{Binding OrderAmmount,StringFormat={}Итого: {0} р., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox Grid.Column="0"
+                      Margin="5"
+                      VerticalAlignment="Bottom"
+                      materialDesign:HintAssist.Hint="Пункт выдачи..."
+                      Style="{StaticResource pwsComboBox}"/>
             <TextBlock Grid.Column="1"
+                       Margin="5"
                        FontFamily="{StaticResource pwsFont}"
-                       Text="{Binding DiscountAmmount,StringFormat={}Общая скидка: {0} %, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                       VerticalAlignment="Bottom"
+                       Text="{Binding OrderAmmount,StringFormat={}Итого: {0}₽, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Column="2"
+                       Margin="5"
+                       FontFamily="{StaticResource pwsFont}"
+                       VerticalAlignment="Bottom"
+                       Text="{Binding DiscountAmmount,StringFormat={}Общая скидка: {0}₽, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Menu Grid.Column="4"
                   Margin="5"
@@ -37,7 +47,6 @@
                 <MenuItem FontFamily="{StaticResource pwsFont}">
                     <MenuItem.Header>
                         <Image Source="\Resources\Image\logo.png"
-                               Stretch="UniformToFill"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
                     </MenuItem.Header>
                     <MenuItem Foreground="White"

@@ -62,9 +62,12 @@
             </TextBlock>
             <Menu Grid.Column="4"
                   Margin="5"
+                  
                   HorizontalAlignment="Right">
+                
                 <MenuItem FontFamily="{StaticResource pwsFont}">
                     <MenuItem.Header>
+                        
                         <Image Source="\Resources\Image\logo.png"
                                Stretch="UniformToFill"
                                RenderOptions.BitmapScalingMode="HighQuality"/>
@@ -155,13 +158,14 @@
                                                Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"
                                                TextWrapping="Wrap"/>
                                     <TextBlock Grid.Row="3"
-                                               Text="{Binding Price, StringFormat={}Цена: {0} р}"
-                                               TextWrapping="Wrap"/>
-                                    
+                                               Text="{Binding Price, StringFormat={}Цена: {0}₽}"
+                                               TextWrapping="Wrap"
+                                               TextDecorations="Strikethrough"/>
+
                                 </Grid>
 
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding Discount, StringFormat={}Скидка: {0} %}"
+                                           Text="{Binding Discount, StringFormat={}Скидка: {0}%}"
                                            TextWrapping="Wrap"
                                            VerticalAlignment="Center"/>
                             </Grid>

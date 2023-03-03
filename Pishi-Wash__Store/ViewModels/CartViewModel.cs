@@ -9,7 +9,8 @@ namespace Pishi_Wash__Store.ViewModels
         public ObservableCollection<Product> Products { get; set; }
         public Product SelectedProduct { get; set; }
         public float OrderAmmount { get; set; } = 0;
-        public int DiscountAmmount { get; set; } = 0;
+        public float DiscountAmmount { get; set; } = 0;
+        private float _orderAmmount;
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
 
         public CartViewModel(PageService pageService, ProductService productService)
@@ -63,6 +64,7 @@ namespace Pishi_Wash__Store.ViewModels
         {
             OrderAmmount = 0;
             DiscountAmmount = 0;
+            _orderAmmount = 0;
             if (Products.Count <= 0)
             {
                 OrderAmmount = 0;
@@ -73,10 +75,10 @@ namespace Pishi_Wash__Store.ViewModels
                 foreach (var item in Products)
                 {
                     OrderAmmount += (item.Count * item.Price) - ((item.Count * item.Price) * item.Discount / 100);
-                    DiscountAmmount += item.Discount;
+                    _orderAmmount += item.Count * item.Price;
                 }
             }
-                
+            DiscountAmmount = (float)Math.Round((_orderAmmount - OrderAmmount), 2);
         }
     }
 }
