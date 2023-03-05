@@ -1,6 +1,4 @@
-﻿using Pishi_Wash__Store.Data.Db;
-
-namespace Pishi_Wash__Store.Services
+﻿namespace Pishi_Wash__Store.Services
 {
     public class UserService
     {
@@ -11,7 +9,7 @@ namespace Pishi_Wash__Store.Services
         }
         public async Task<bool> AuthorizationAsync(string username, string password)
         {
-            var user = await _tradeContext.Users.SingleOrDefaultAsync(u => u.UserLogin == username);
+            var user = await _tradeContext.Users.AsNoTracking().SingleOrDefaultAsync(u => u.UserLogin == username);
             if (user == null)
                 return false;
             if (user.UserPassword.Equals(password))

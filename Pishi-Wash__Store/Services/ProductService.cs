@@ -1,4 +1,4 @@
-﻿using Pishi_Wash__Store.Data.Db;
+﻿using Pishi_Wash__Store.Data.Models;
 
 namespace Pishi_Wash__Store.Services
 {
@@ -10,33 +10,38 @@ namespace Pishi_Wash__Store.Services
             _tradeContext = tradeContext;
         }
 
-        public async Task<List<Models.Product>> GetProducts()
+        public async Task<List<DbProduct>> GetProducts()
         {
-            List<Models.Product> products = new();
-            var product = await _tradeContext.Products.ToListAsync();
-            await _tradeContext.Pnames.ToListAsync();
-            await _tradeContext.Pmanufacturers.ToListAsync();
-            await Task.Run(() =>
+            List<DbProduct> products = new();
+            try
             {
-                foreach (var item in product)
+                var product = await _tradeContext.Products.ToListAsync();
+                await _tradeContext.Pnames.ToListAsync();
+                await _tradeContext.Pmanufacturers.ToListAsync();
+                await Task.Run(() =>
                 {
-                    products.Add(new Models.Product
+                    foreach (var item in product)
                     {
-                        Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
-                        Title = item.ProductNameNavigation.ProductName,
-                        Description = item.ProductDescription,
-                        Manufacturer = item.ProductManufacturerNavigation.ProductManufacturer,
-                        Price = item.ProductCost,
-                        Discount = item.ProductDiscountAmount.Value,
-                        Article = item.ProductArticleNumber
-                    });
-                }
-            });
+                        products.Add(new DbProduct
+                        {
+                            Image = item.ProductPhoto == string.Empty ? "picture.png" : item.ProductPhoto,
+                            Title = item.ProductNameNavigation.ProductName,
+                            Description = item.ProductDescription,
+                            Manufacturer = item.ProductManufacturerNavigation.ProductManufacturer,
+                            Price = item.ProductCost,
+                            Discount = item.ProductDiscountAmount.Value,
+                            Article = item.ProductArticleNumber,
+                            Quantity = item.ProductQuantityInStock
+                        });
+                    }
+                });
+            }
+            catch { }
             return products;
         }
-        public async Task<List<Models.Product>> GetCart()
+        public async Task<List<DbProduct>> GetCart()
         {
-            List<Models.Product> a = new();
+            List<DbProduct> a = new();
             var b = await GetProducts();
 
             foreach (var item in Global.CurrentCart)
@@ -49,6 +54,27 @@ namespace Pishi_Wash__Store.Services
                 }
             }
             return a;
+        }
+
+        public async Task<List<Point>> GetPoints() => await _tradeContext.Points.AsNoTracking().ToListAsync();
+
+        public async Task<int> AddOrder(Order order)
+        {
+            await _tradeContext.Orders.AddAsync(order);
+            await _tradeContext.SaveChangesAsync();
+
+            foreach (var item in Global.CurrentCart)
+            {
+                await _tradeContext.Orderproducts.AddAsync(new Orderproduct
+                {
+                    OrderId = order.OrderId,
+                    ProductArticleNumber = item.ArticleName,
+                    ProductCount = item.Count
+                });
+                await _tradeContext.SaveChangesAsync();
+            }
+
+            return order.OrderId;
         }
     }
 }

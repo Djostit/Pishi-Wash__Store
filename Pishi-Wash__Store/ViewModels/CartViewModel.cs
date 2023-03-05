@@ -1,23 +1,26 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class CartViewModel : BindableBase
     {
         private readonly PageService _pageService;
         private readonly ProductService _productService;
-        public ObservableCollection<Product> Products { get; set; }
-        public Product SelectedProduct { get; set; }
+        private readonly DocumentService _documentService;
+        private readonly static Random rnd = new();
+        public ObservableCollection<DbProduct> Products { get; set; }
+        public List<Point> Points { get; set; }
+        public DbProduct SelectedProduct { get; set; }
+        public Point SelectedPoint { get; set; }
         public float OrderAmmount { get; set; } = 0;
         public float DiscountAmmount { get; set; } = 0;
         private float _orderAmmount;
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
 
-        public CartViewModel(PageService pageService, ProductService productService)
+        public CartViewModel(PageService pageService, ProductService productService, DocumentService documentService)
         {
             _pageService = pageService;
             _productService = productService;
-            Task.Run(async () => { Products = new ObservableCollection<Product>(await _productService.GetCart()); ValueCheck(); });
+            _documentService = documentService;
+            Task.Run(async () => { Products = new ObservableCollection<DbProduct>(await _productService.GetCart()); ValueCheck(); Points = await _productService.GetPoints(); });
         }
 
         public DelegateCommand ReturnBackCommand => new(() =>
@@ -60,6 +63,24 @@ namespace Pishi_Wash__Store.ViewModels
             }
             ValueCheck();
         });
+        
+        public AsyncCommand CreateOrderCommand => new(async() =>
+        {
+            int code = rnd.Next(100, 999);
+            await _documentService.GetCheck(OrderAmmount, DiscountAmmount, SelectedPoint, code, await _productService.AddOrder(new Order
+            {
+                OrderDate = DateOnly.FromDateTime(DateTime.Now),
+                OrderDeliveryDate = DateOnly.FromDateTime(DateTime.Now.AddDays(Products.FirstOrDefault(a => a.Quantity < 3) != null ? 3 : 6)),
+                OrderPickupPoint = SelectedPoint.PointId,
+                OrderFullName = FullName == "Гость" ? string.Empty : FullName,
+                OrderCode = code,
+                OrderStatus = "Новый"
+            }));
+
+            Products.Clear();
+            Global.CurrentCart?.Clear();
+            ValueCheck();
+        }, bool() => { return SelectedPoint != null && Products.Count != 0; });
         private void ValueCheck()
         {
             OrderAmmount = 0;
@@ -77,8 +98,9 @@ namespace Pishi_Wash__Store.ViewModels
                     OrderAmmount += (item.Count * item.Price) - ((item.Count * item.Price) * item.Discount / 100);
                     _orderAmmount += item.Count * item.Price;
                 }
+                OrderAmmount = (float)Math.Round(OrderAmmount, 2);
+                DiscountAmmount = (float)Math.Round((_orderAmmount - OrderAmmount), 2);
             }
-            DiscountAmmount = (float)Math.Round((_orderAmmount - OrderAmmount), 2);
         }
     }
 }

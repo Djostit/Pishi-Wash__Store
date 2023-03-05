@@ -1,14 +1,16 @@
-﻿namespace Pishi_Wash__Store.Data.Db;
+﻿namespace Pishi_Wash__Store.Data;
+
 public partial class TradeContext : DbContext
 {
+
     public TradeContext(DbContextOptions<TradeContext> options)
         : base(options)
     {
     }
 
-    public virtual DbSet<Agenttype> Agenttypes { get; set; }
-
     public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<Orderproduct> Orderproducts { get; set; }
 
     public virtual DbSet<Pcategory> Pcategories { get; set; }
 
@@ -22,13 +24,10 @@ public partial class TradeContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Producttype> Producttypes { get; set; }
-
     public virtual DbSet<Role> Roles { get; set; }
 
-    public virtual DbSet<Supplier> Suppliers { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -36,25 +35,46 @@ public partial class TradeContext : DbContext
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
 
-        modelBuilder.Entity<Agenttype>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("agenttype");
-
-            entity.Property(e => e.Image).HasMaxLength(100);
-            entity.Property(e => e.Title).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.OrderId).HasName("PRIMARY");
 
             entity.ToTable("order");
 
+            entity.HasIndex(e => e.OrderPickupPoint, "conn__Point");
+
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
-            entity.Property(e => e.OrderPickupPoint).HasColumnType("text");
-            entity.Property(e => e.OrderStatus).HasColumnType("text");
+            entity.Property(e => e.OrderFullName).HasColumnType("text");
+            entity.Property(e => e.OrderStatus).HasMaxLength(50);
+
+            entity.HasOne(d => d.OrderPickupPointNavigation).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.OrderPickupPoint)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("conn__Point");
+        });
+
+        modelBuilder.Entity<Orderproduct>(entity =>
+        {
+            entity.HasKey(e => new { e.OrderId, e.ProductArticleNumber })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+            entity.ToTable("orderproduct");
+
+            entity.HasIndex(e => e.ProductArticleNumber, "ProductArticleNumber");
+
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
+            entity.Property(e => e.ProductArticleNumber).HasMaxLength(100);
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Orderproducts)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("orderproduct_ibfk_1");
+
+            entity.HasOne(d => d.ProductArticleNumberNavigation).WithMany(p => p.Orderproducts)
+                .HasForeignKey(d => d.ProductArticleNumber)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("orderproduct_ibfk_2");
         });
 
         modelBuilder.Entity<Pcategory>(entity =>
@@ -89,17 +109,16 @@ public partial class TradeContext : DbContext
 
         modelBuilder.Entity<Point>(entity =>
         {
-            entity.HasKey(e => e.Index).HasName("PRIMARY");
+            entity.HasKey(e => e.PointId).HasName("PRIMARY");
 
             entity.ToTable("point");
 
-            entity.Property(e => e.Index)
-                .ValueGeneratedNever()
-                .HasColumnName("index");
+            entity.Property(e => e.PointId).HasColumnName("PointID");
             entity.Property(e => e.City)
                 .HasMaxLength(100)
                 .HasColumnName("city");
             entity.Property(e => e.House).HasColumnName("house");
+            entity.Property(e => e.Index).HasColumnName("index");
             entity.Property(e => e.Street)
                 .HasMaxLength(100)
                 .HasColumnName("street");
@@ -156,15 +175,6 @@ public partial class TradeContext : DbContext
                 .HasConstraintName("conn__PProvider");
         });
 
-        modelBuilder.Entity<Producttype>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("producttype");
-
-            entity.Property(e => e.Title).HasMaxLength(50);
-        });
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RoleId).HasName("PRIMARY");
@@ -173,18 +183,6 @@ public partial class TradeContext : DbContext
 
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.RoleName).HasMaxLength(100);
-        });
-
-        modelBuilder.Entity<Supplier>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
-
-            entity.ToTable("supplier");
-
-            entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Inn).HasMaxLength(12);
-            entity.Property(e => e.SupplierType).HasMaxLength(20);
-            entity.Property(e => e.Title).HasMaxLength(150);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -212,5 +210,4 @@ public partial class TradeContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
 }

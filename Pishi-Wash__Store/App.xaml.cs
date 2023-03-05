@@ -7,8 +7,8 @@
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            base.OnStartup(e);
             ViewModelLocator.Init();
+            base.OnStartup(e);
         }
         //protected override void OnExit(ExitEventArgs e)
         //{

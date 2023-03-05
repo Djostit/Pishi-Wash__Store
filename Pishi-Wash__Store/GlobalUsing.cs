@@ -7,7 +7,6 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Pishi_Wash__Store.Data;
 global using Pishi_Wash__Store.Models;
-global using Pishi_Wash__Store.Models.DbContext;
 global using Pishi_Wash__Store.Properties;
 global using Pishi_Wash__Store.Services;
 global using Pishi_Wash__Store.ViewModels;
@@ -25,4 +24,6 @@ global using System.Globalization;
 global using System.Windows.Data;
 global using System.Windows.Media;
 global using Pishi_Wash__Store.Assets;
-
+global using Pishi_Wash__Store.Data.Models;
+global using System.Collections.ObjectModel;
+global using Point = Pishi_Wash__Store.Data.Models.Point;

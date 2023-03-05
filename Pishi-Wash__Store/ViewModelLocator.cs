@@ -1,11 +1,9 @@
-﻿using Pishi_Wash__Store.Data.Db;
-
-namespace Pishi_Wash__Store
+﻿namespace Pishi_Wash__Store
 {
     internal class ViewModelLocator
     {
-        private static ServiceProvider _provider;
-        public static IConfiguration _configuration;
+        private static ServiceProvider? _provider;
+        public static IConfiguration? _configuration;
         public static void Init()
         {
             var builder = new ConfigurationBuilder()
@@ -27,28 +25,6 @@ namespace Pishi_Wash__Store
 
             #region Connection
 
-            //services.AddDbContext<DataContext>(options =>
-            //{
-            //    try
-            //    {
-            //        var conn = _configuration.GetConnectionString("LocalConnection");
-            //        options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            //    }
-            //    catch (MySqlConnector.MySqlException)
-            //    {
-            //        try
-            //        {
-            //            var conn = _configuration.GetConnectionString("RemoteConnection");
-            //            options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-            //        }
-            //        catch (MySqlConnector.MySqlException)
-            //        {
-            //            Debug.WriteLine("Ошибка.");
-            //        }
-
-            //    }
-            //}, ServiceLifetime.Transient);
-
             services.AddDbContext<TradeContext>(options =>
             {
                 try
@@ -58,17 +34,21 @@ namespace Pishi_Wash__Store
                 }
                 catch (MySqlConnector.MySqlException)
                 {
-                    try
+                    if (MessageBox.Show("Попробовать другой вариант?", "Нет подключения к бд", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
                     {
-                        var conn = _configuration.GetConnectionString("RemoteConnection");
-                        options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                        try
+                        {
+                            var conn = _configuration.GetConnectionString("RemoteConnection");
+                            options.UseMySql(conn, ServerVersion.AutoDetect(conn));
+                        }
+                        catch (MySqlConnector.MySqlException)
+                        {
+                            MessageBox.Show("Ошибка", "Нет подключения к бд", MessageBoxButton.OK, MessageBoxImage.Error);
+                            Process.GetCurrentProcess().Kill();
+                        }
                     }
-                    catch (MySqlConnector.MySqlException)
-                    {
-                        Debug.WriteLine("Ошибка.");
-                        Application.Current.Shutdown();
-                    }
-
+                    else
+                        Process.GetCurrentProcess().Kill();
                 }
             }, ServiceLifetime.Singleton);
 
@@ -79,19 +59,20 @@ namespace Pishi_Wash__Store
             services.AddSingleton<PageService>();
             services.AddSingleton<UserService>();
             services.AddSingleton<ProductService>();
+            services.AddSingleton<DocumentService>();
 
             #endregion
 
             _provider = services.BuildServiceProvider();
-            foreach (var service in services)
-            {
-                _provider.GetRequiredService(service.ServiceType);
-            }
+            //foreach (var service in services)
+            //{
+            //    _provider.GetRequiredService(service.ServiceType);
+            //}
         }
-        public mWindowViewModel mWindowViewModel => _provider.GetRequiredService<mWindowViewModel>();
-        public SignInViewModel SignInViewModel => _provider.GetRequiredService<SignInViewModel>();
-        public SignUpViewModel SignUpViewModel => _provider.GetRequiredService<SignUpViewModel>();
-        public BrowseProductViewModel BrowseProductViewModel => _provider.GetRequiredService<BrowseProductViewModel>();
-        public CartViewModel CartViewModel => _provider.GetRequiredService<CartViewModel>();
+        public mWindowViewModel? mWindowViewModel => _provider?.GetRequiredService<mWindowViewModel>();
+        public SignInViewModel? SignInViewModel => _provider?.GetRequiredService<SignInViewModel>();
+        public SignUpViewModel? SignUpViewModel => _provider?.GetRequiredService<SignUpViewModel>();
+        public BrowseProductViewModel? BrowseProductViewModel => _provider?.GetRequiredService<BrowseProductViewModel>();
+        public CartViewModel? CartViewModel => _provider?.GetRequiredService<CartViewModel>();
     }
 }

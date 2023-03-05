@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseProductViewModel : BindableBase
     {
@@ -9,8 +7,8 @@ namespace Pishi_Wash__Store.ViewModels
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-5%", "5-9%", "9% и более" };
         public bool IsEnabledCart { get; set; }
-        public List<Product> Products { get; set; }
-        public Product SelectedProduct { get; set; }    
+        public List<DbProduct> Products { get; set; }
+        public DbProduct SelectedProduct { get; set; }    
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public int? MaxRecords { get; set; } = 0;
         public int? Records { get; set; } = 0;
@@ -51,7 +49,7 @@ namespace Pishi_Wash__Store.ViewModels
                 switch (SelectedFilter)
                 {
                     case "0-5%":
-                        currentProduct = currentProduct.Where(p => p.Discount > 0 && p.Discount < 5).ToList();
+                        currentProduct = currentProduct.Where(p => p.Discount >= 0 && p.Discount < 5).ToList();
                         break;
                     case "5-9%":
                         currentProduct = currentProduct.Where(p => p.Discount >= 5 && p.Discount < 9).ToList();

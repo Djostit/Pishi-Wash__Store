@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pishi_Wash__Store.Data.Db;
+namespace Pishi_Wash__Store.Data.Models;
+
 public partial class Pprovider
 {
     public int PproviderId { get; set; }

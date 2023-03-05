@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pishi_Wash__Store.Data.Db;
+namespace Pishi_Wash__Store.Data.Models;
+
 public partial class Point
 {
-    public uint Index { get; set; }
+    public int PointId { get; set; }
+
+    public int Index { get; set; }
 
     public string City { get; set; } = null!;
 
     public string Street { get; set; } = null!;
 
     public int House { get; set; }
+
+    public virtual ICollection<Order> Orders { get; } = new List<Order>();
 }

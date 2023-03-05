@@ -1,14 +1,11 @@
-﻿namespace Pishi_Wash__Store.Models.DbContext
+﻿namespace Pishi_Wash__Store.Models
 {
     public class DbUser
     {
-        [Key]
-        public int UserID { get; set; }
+        public int Id { get; set; }
         public string UserSurname { get; set; }
         public string UserName { get; set; }
         public string UserPatronymic { get; set; }
-        public string UserLogin { get; set; }
-        public string UserPassword { get; set; }
         public int UserRole { get; set; }
     }
 }

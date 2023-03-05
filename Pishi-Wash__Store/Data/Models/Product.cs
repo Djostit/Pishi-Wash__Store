@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pishi_Wash__Store.Data.Db;
+namespace Pishi_Wash__Store.Data.Models;
+
 public partial class Product
 {
     public string ProductArticleNumber { get; set; } = null!;
@@ -25,6 +26,8 @@ public partial class Product
     public int ProductQuantityInStock { get; set; }
 
     public string ProductStatus { get; set; } = null!;
+
+    public virtual ICollection<Orderproduct> Orderproducts { get; } = new List<Orderproduct>();
 
     public virtual Pcategory ProductCategoryNavigation { get; set; } = null!;
 

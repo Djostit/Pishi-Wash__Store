@@ -15,7 +15,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.8*"/>
+            <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -29,7 +30,24 @@
                       Margin="5"
                       VerticalAlignment="Bottom"
                       materialDesign:HintAssist.Hint="Пункт выдачи..."
-                      Style="{StaticResource pwsComboBox}"/>
+                      Style="{StaticResource pwsComboBox}"
+                      ItemsSource="{Binding Points}"
+                      SelectedItem="{Binding SelectedPoint}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}, г. {1}, ул. {2}, д. {3}">
+                                    <Binding Path="Index"/>
+                                    <Binding Path="City"/>
+                                    <Binding Path="Street"/>
+                                    <Binding Path="House"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <TextBlock Grid.Column="1"
                        Margin="5"
                        FontFamily="{StaticResource pwsFont}"
@@ -134,9 +152,16 @@
                                     <TextBlock Grid.Row="2"
                                                Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"/>
                                     <TextBlock Grid.Row="3"
-                                               Text="{Binding Price, StringFormat={}Цена: {0} р}"/>
+                                               TextWrapping="Wrap">
+                                        <TextBlock.Inlines>
+                                            <Run Text="Цена:"/>
+                                            <Run Text="{Binding Price, StringFormat={}{0:C}, ConverterCulture=ru-RU}"
+                                                 TextDecorations="{Binding Discount, Converter={StaticResource ValueToTextDecorationsConverter}}"/>
+                                            <Run Text="{Binding DisplayedPrice, StringFormat={}{0:C}, ConverterCulture=ru-RU, Mode=OneWay}"/>
+                                        </TextBlock.Inlines>
+                                    </TextBlock>
                                     <TextBlock Grid.Row="4"
-                                               Text="{Binding Count, StringFormat={}Выбранное количество: {0}}"/>
+                                               Text="{Binding Count, StringFormat={}Выбранное количество: {0} шт.}"/>
 
                                 </Grid>
 
@@ -148,6 +173,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Button Content="Оформить заказ"
+                    Command="{Binding CreateOrderCommand,IsAsync=True}"
+                    HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Page>
