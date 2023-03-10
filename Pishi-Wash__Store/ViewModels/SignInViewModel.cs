@@ -20,7 +20,13 @@
                 if (await _userService.AuthorizationAsync(Username, Password))
                 {
                     ErrorMessageButton = string.Empty;
-                    await Application.Current.Dispatcher.InvokeAsync(async () => _pageService.ChangePage(new BrowseProductPage()));
+                    await Application.Current.Dispatcher.InvokeAsync(async () => 
+                    {
+                        if (UserSetting.Default.UserRole != "Клиент")
+                            _pageService.ChangePage(new BrowseProductPage());
+                        else
+                            _pageService.ChangePage(new BrowseProductPage());
+                    });
                 }
                 else
                     ErrorMessageButton = "Неверный логин или пароль";
