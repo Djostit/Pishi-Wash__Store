@@ -22,10 +22,10 @@
                     ErrorMessageButton = string.Empty;
                     await Application.Current.Dispatcher.InvokeAsync(async () => 
                     {
-                        if (UserSetting.Default.UserRole != "Клиент")
+                        if (UserSetting.Default.UserRole == "Клиент")
                             _pageService.ChangePage(new BrowseProductPage());
                         else
-                            _pageService.ChangePage(new BrowseProductPage());
+                            _pageService.ChangePage(new BrowseAdminPage());
                     });
                 }
                 else
@@ -46,6 +46,13 @@
                 return true; return false;
         });
         public DelegateCommand SignUpCommand => new(() => _pageService.ChangePage(new SignUpPage()));
-        public DelegateCommand SignInLaterCommand => new(() => _pageService.ChangePage(new BrowseProductPage()));
+        public DelegateCommand SignInLaterCommand => new(() => 
+        {
+#if DEBUG
+            _pageService.ChangePage(new BrowseAdminPage());
+#else
+            _pageService.ChangePage(new BrowseProductPage()); 
+#endif
+        });
     }
 }

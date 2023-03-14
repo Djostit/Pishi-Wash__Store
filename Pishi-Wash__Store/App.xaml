@@ -12,9 +12,12 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Green.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
             <local:ViewModelLocator x:Key="ViewModelLocator"/>
+            
             <converterts:StringToBrushConverter x:Key="StringToBrushConverter"/>
             <converterts:ValueToTextDecorationsConverter x:Key="ValueToTextDecorationsConverter"/>
+            <converterts:AdminStringToBrushConverter x:Key="AdminStringToBrushConverter"/>
 
             <Color x:Key="pwsPrimaryColor">#ffffff</Color>
             <Color x:Key="pwsSecondaryColor">#76e383</Color>

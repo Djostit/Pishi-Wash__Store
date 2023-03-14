@@ -1,4 +1,6 @@
 ﻿using Pishi_Wash__Store.Data.Models;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace Pishi_Wash__Store.Services
 {
@@ -75,6 +77,64 @@ namespace Pishi_Wash__Store.Services
             }
 
             return order.OrderId;
+        }
+        public async Task<List<Order>> GetOrders()
+        {
+            await _tradeContext.Orderproducts.ToListAsync();
+            return await _tradeContext.Orders.ToListAsync();
+        }
+        public async Task UpdateAmmountOrder()
+        {
+            await _tradeContext.Orderproducts.ToListAsync();
+            await _tradeContext.Products.ToListAsync();
+            var currentList = await _tradeContext.Orders.ToListAsync();
+
+            foreach(var item in currentList)
+            {
+                Func<float?> test = ()=> 
+                {
+                    //OrderAmmount += (item.Count * item.Price) - ((item.Count * item.Price) * item.Discount / 100);
+                    //_orderAmmount += item.Count * item.Price;
+
+                    float? orderammount = 0;
+                    float? _orderammount = 0;
+                    foreach (var test1 in item.Orderproducts.ToList()) 
+                    {
+                        orderammount += (test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost) - ((test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost) * test1.ProductArticleNumberNavigation.ProductDiscountAmount / 100);
+                        _orderammount += test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost;
+                    }
+
+                    orderammount = (float)Math.Round((decimal)orderammount, 2);
+                    _orderammount = (float)Math.Round(((decimal)_orderammount - (decimal)orderammount), 2);
+                    return orderammount;
+                };
+
+                Func<float?> test2 = () =>
+                {
+                    //OrderAmmount += (item.Count * item.Price) - ((item.Count * item.Price) * item.Discount / 100);
+                    //_orderAmmount += item.Count * item.Price;
+
+                    float? orderammount = 0;
+                    float? _orderammount = 0;
+                    foreach (var test1 in item.Orderproducts.ToList())
+                    {
+                        orderammount += (test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost) - ((test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost) * test1.ProductArticleNumberNavigation.ProductDiscountAmount / 100);
+                        _orderammount += test1.ProductCount * test1.ProductArticleNumberNavigation.ProductCost;
+                    }
+
+                    orderammount = (float)Math.Round((decimal)orderammount, 2);
+                    _orderammount = (float)Math.Round(((decimal)_orderammount - (decimal)orderammount), 2);
+                    return _orderammount;
+                };
+                Debug.WriteLine(item.OrderId + " " + test() + " " + test2());
+                //item.OrderAmmount = test();
+
+                item.OrderAmmount = (float)test();
+                await _tradeContext.SaveChangesAsync();
+
+                item.OrderDiscountAmmount = (float)test2();
+                await _tradeContext.SaveChangesAsync();
+            }
         }
     }
 }

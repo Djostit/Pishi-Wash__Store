@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Pishi_Wash__Store.Data.Models;
+namespace Pishi_Wash__Store.Data.test;
 
 public partial class Order
 {
@@ -18,10 +18,6 @@ public partial class Order
     public int OrderCode { get; set; }
 
     public string OrderStatus { get; set; } = null!;
-
-    public float OrderAmmount { get; set; }
-
-    public float OrderDiscountAmmount { get; set; }
 
     public virtual Point OrderPickupPointNavigation { get; set; } = null!;
 
