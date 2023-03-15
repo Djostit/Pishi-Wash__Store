@@ -20,7 +20,12 @@
             _pageService = pageService;
             _productService = productService;
             _documentService = documentService;
-            Task.Run(async () => { Products = new ObservableCollection<DbProduct>(await _productService.GetCart()); ValueCheck(); Points = await _productService.GetPoints(); });
+            Task.Run(async () => 
+            { 
+                Products = new ObservableCollection<DbProduct>(await _productService.GetCart()); 
+                ValueCheck(); 
+                Points = await _productService.GetPoints(); 
+            });
         }
 
         public DelegateCommand ReturnBackCommand => new(() =>
@@ -30,7 +35,6 @@
 
         public DelegateCommand SignOutCommand => new(() =>
         {
-            UserSetting.Default.Id = 0;
             UserSetting.Default.UserName = string.Empty;
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
@@ -73,6 +77,8 @@
                 OrderDeliveryDate = DateOnly.FromDateTime(DateTime.Now.AddDays(Products.FirstOrDefault(a => a.Quantity < 3) != null ? 3 : 6)),
                 OrderPickupPoint = SelectedPoint.PointId,
                 OrderFullName = FullName == "Гость" ? string.Empty : FullName,
+                OrderAmmount= OrderAmmount,
+                OrderDiscountAmmount = DiscountAmmount,
                 OrderCode = code,
                 OrderStatus = "Новый"
             }));

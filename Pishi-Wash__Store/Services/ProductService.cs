@@ -136,5 +136,10 @@ namespace Pishi_Wash__Store.Services
                 await _tradeContext.SaveChangesAsync();
             }
         }
+
+        public async Task GetListFullInformation()
+        {
+            var
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace Pishi_Wash__Store.ViewModels
         }
         public DelegateCommand SignOutCommand => new(() =>
         {
-            UserSetting.Default.Id = 0;
+            
             UserSetting.Default.UserName = string.Empty;
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
