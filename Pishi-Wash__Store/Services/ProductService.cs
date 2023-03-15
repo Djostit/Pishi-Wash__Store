@@ -139,7 +139,7 @@ namespace Pishi_Wash__Store.Services
 
         public async Task GetListFullInformation()
         {
-            var
+            
         }
     }
 }
