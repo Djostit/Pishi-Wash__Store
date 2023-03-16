@@ -13,7 +13,7 @@
 }
 ```
 
-[Скачать](https://github.com/Djostit/Write-and-Erase/releases/tag/v1.0)
+[Скачать](https://github.com/Djostit/Write-and-Erase/releases)
 
 
 
