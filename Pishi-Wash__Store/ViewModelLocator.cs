@@ -6,10 +6,10 @@
         public static IConfiguration? _configuration;
         public static void Init()
         {
-            var builder = new ConfigurationBuilder()
+            var _configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
-            _configuration = builder.Build();
+            .AddJsonFile("appsettings.json")
+            .Build();
 
             var services = new ServiceCollection();
 
@@ -30,7 +30,7 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString("LocalConnection");
+                    var conn = _configuration.GetConnectionString(/*"LocalConnection"*/ "RemoteConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)

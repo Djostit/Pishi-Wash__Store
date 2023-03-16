@@ -10,10 +10,5 @@
             ViewModelLocator.Init();
             base.OnStartup(e);
         }
-        //protected override void OnExit(ExitEventArgs e)
-        //{
-        //    UserSetting.Default.Save();
-        //    base.OnExit(e);
-        //}
     }
 }

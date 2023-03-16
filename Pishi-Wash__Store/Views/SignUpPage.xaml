@@ -30,55 +30,63 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0"
                        Text="Зарегистрируйте учетную запись!"
-                       HorizontalAlignment="Center"
                        FontFamily="{StaticResource pwsFont}"
+                       HorizontalAlignment="Center"
                        Foreground="Black"/>
             <TextBox Grid.Row="1"
                      Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsTextBox}"
                      materialDesign:HintAssist.Hint="Имя"
                      Margin="0 20 0 0"/>
 
             <TextBox Grid.Row="2"
                      Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     Text="{Binding UserSurname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsTextBox}"
                      materialDesign:HintAssist.Hint="Фамилия"
                      Margin="0 20 0 0"/>
 
             <TextBox Grid.Row="3"
                      Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     Text="{Binding UserPatronymic, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsTextBox}"
                      materialDesign:HintAssist.Hint="Отчество"
                      Margin="0 20 0 0"/>
             
             <TextBox Grid.Row="4"
                      Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     Text="{Binding UserLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsTextBox}"
                      materialDesign:HintAssist.Hint="Логин"
+                     MaxLength="14"
                      Margin="0 20 0 0"/>
 
-            <TextBox Grid.Row="5"
+            <PasswordBox Grid.Row="5"
                      Foreground="Black"
-                     FontFamily="{StaticResource pwsFont}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     materialDesign:PasswordBoxAssist.Password="{Binding UserPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource pwsPasswordBox}"
                      materialDesign:HintAssist.Hint="Пароль"
+                     MaxLength="6"
                      Margin="0 20 0 0"/>
 
             <Button Grid.Row="6"
                     Foreground="White"
                     Command="{Binding SignUpCommand}"
-                    Content="Войти"
-                    FontFamily="{StaticResource pwsFont}"
+                    Content="Зарегистрироваться"
+                    Style="{StaticResource pwsButton}"
                     Margin="0 20 0 0"/>
-            <StackPanel Grid.Row="7"
+
+            <TextBlock Grid.Row="7"
+                       Text="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
+                       Style="{StaticResource pwsTextBlockError}"/>
+            
+            <StackPanel Grid.Row="8"
                         Orientation="Horizontal"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center">

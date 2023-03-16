@@ -81,7 +81,7 @@
                 OrderDiscountAmmount = DiscountAmmount,
                 OrderCode = code,
                 OrderStatus = "Новый"
-            }));
+            }), await _productService.GetListFullInformation());
 
             Products.Clear();
             Global.CurrentCart?.Clear();

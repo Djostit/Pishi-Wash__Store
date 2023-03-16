@@ -137,9 +137,17 @@ namespace Pishi_Wash__Store.Services
             }
         }
 
-        public async Task GetListFullInformation()
+        public async Task<List<Product>> GetListFullInformation()
         {
-            
+            var currentProduct = await _tradeContext.Products.ToListAsync();
+            await _tradeContext.Pnames.ToListAsync();
+            List<Product> a = new();
+            foreach(var item in currentProduct) 
+            {
+                if (Global.CurrentCart.FirstOrDefault(c => c.ArticleName.Equals(item.ProductArticleNumber)) != null)
+                    a.Add(item);
+            }
+            return a;
         }
     }
 }

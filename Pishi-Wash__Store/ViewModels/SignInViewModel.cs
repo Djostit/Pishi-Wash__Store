@@ -39,13 +39,12 @@
                 || string.IsNullOrWhiteSpace(Password))
             {
                 ErrorMessage = "Пустые поля";
-                ErrorMessageButton = string.Empty;
+                ErrorMessageButton = ErrorMessageButton != string.Empty? string.Empty : ErrorMessageButton;
             }
             else
                 ErrorMessage = string.Empty;
 
-            if (ErrorMessage.Equals(string.Empty))
-                return true; return false;
+            return ErrorMessage == string.Empty;
         });
         public DelegateCommand SignUpCommand => new(async() => _pageService.ChangePage(new SignUpPage()));
         public DelegateCommand SignInLaterCommand => new(() => 
