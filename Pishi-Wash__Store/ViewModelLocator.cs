@@ -1,5 +1,15 @@
 ﻿namespace Pishi_Wash__Store
 {
+    /*
+     
+            ______  __   ____      ______  _____________________
+           / __ ) \/ /  / __ \    / / __ \/ ___/_  __/  _/_  __/
+          / __  |\  /  / / / /_  / / / / /\__ \ / /  / /  / /   
+         / /_/ / / /  / /_/ / /_/ / /_/ /___/ // / _/ /  / /    
+        /_____/ /_/  /_____/\____/\____//____//_/ /___/ /_/     
+                                                        
+
+     */
     internal class ViewModelLocator
     {
         private static ServiceProvider? _provider;
@@ -30,7 +40,7 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString(/*"LocalConnection"*/ "RemoteConnection");
+                    var conn = _configuration.GetConnectionString("LocalConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)
