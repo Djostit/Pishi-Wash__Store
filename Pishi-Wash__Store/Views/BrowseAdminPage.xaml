@@ -38,6 +38,7 @@
                       Margin="5"
                       VerticalAlignment="Bottom"
                       materialDesign:HintAssist.Hint="Сортировка..."
+                      SelectedIndex="1"
                       Style="{StaticResource pwsComboBox}"
                       ItemsSource="{Binding Sorts}"
                       SelectedItem="{Binding SelectedSort}"/>
@@ -45,6 +46,7 @@
                       Margin="5"
                       VerticalAlignment="Bottom"
                       materialDesign:HintAssist.Hint="Фильтрация..."
+                      SelectedIndex="0"
                       Style="{StaticResource pwsComboBox}"
                       ItemsSource="{Binding Filters}"
                       SelectedItem="{Binding SelectedFilter}"/>

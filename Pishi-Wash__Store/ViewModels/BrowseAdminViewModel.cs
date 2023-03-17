@@ -32,7 +32,6 @@ namespace Pishi_Wash__Store.ViewModels
         {
             _pageService = pageService;
             _productService = productService;
-            UpdateProduct();
         }
         private async void UpdateProduct()
         {
@@ -59,18 +58,18 @@ namespace Pishi_Wash__Store.ViewModels
             if (!string.IsNullOrEmpty(Search))
                 currentOrders = currentOrders.Where(p => p.OrderId.ToString().ToLower().Contains(Search.ToLower())).ToList();
 
-            //if (!string.IsNullOrEmpty(SelectedSort))
-            //{
-            //    switch (SelectedSort)
-            //    {
-            //        case "По возрастанию":
-            //            currentOrders = currentOrders.OrderBy(p => p.Price).ToList();
-            //            break;
-            //        case "По убыванию":
-            //            currentOrders = currentOrders.OrderByDescending(p => p.Price).ToList();
-            //            break;
-            //    }
-            //}
+            if (!string.IsNullOrEmpty(SelectedSort))
+            {
+                switch (SelectedSort)
+                {
+                    case "По возрастанию":
+                        currentOrders = currentOrders.OrderBy(o => o.OrderDate).ToList();
+                        break;
+                    case "По убыванию":
+                        currentOrders = currentOrders.OrderByDescending(o => o.OrderDate).ToList();
+                        break;
+                }
+            }
 
             Records = currentOrders.Count;
             Orders = currentOrders;

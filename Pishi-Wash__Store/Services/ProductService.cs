@@ -80,7 +80,7 @@ namespace Pishi_Wash__Store.Services
         }
         public async Task<List<Order>> GetOrders()
         {
-            await _tradeContext.Orderproducts.ToListAsync();
+            _tradeContext.Orderproducts.ToList();
             return await _tradeContext.Orders.ToListAsync();
         }
         public async Task UpdateAmmountOrder()
