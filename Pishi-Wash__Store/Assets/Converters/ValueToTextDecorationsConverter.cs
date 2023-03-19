@@ -2,9 +2,9 @@
 {
     public class ValueToTextDecorationsConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var str = value as int?;
+            var str = value as sbyte?;
             if (str == null) { return default; }
             else if (str == 0) { return default; }
             else { return TextDecorations.Strikethrough; }

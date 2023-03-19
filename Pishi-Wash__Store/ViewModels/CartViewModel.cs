@@ -5,7 +5,7 @@
         private readonly PageService _pageService;
         private readonly ProductService _productService;
         private readonly DocumentService _documentService;
-        private readonly static Random rnd = new();
+        private static readonly Random rnd = new();
         public ObservableCollection<DbProduct> Products { get; set; }
         public List<Point> Points { get; set; }
         public DbProduct SelectedProduct { get; set; }
@@ -20,11 +20,11 @@
             _pageService = pageService;
             _productService = productService;
             _documentService = documentService;
-            Task.Run(async () => 
-            { 
-                Products = new ObservableCollection<DbProduct>(await _productService.GetCart()); 
-                ValueCheck(); 
-                Points = await _productService.GetPoints(); 
+            Task.Run(async () =>
+            {
+                Products = new ObservableCollection<DbProduct>(await _productService.GetCart());
+                ValueCheck();
+                Points = await _productService.GetPoints();
             });
         }
 
@@ -43,23 +43,23 @@
             _pageService.ChangePage(new SingInPage());
         });
 
-        public DelegateCommand RemoveCommand => new(() => 
+        public DelegateCommand RemoveCommand => new(() =>
         {
-            if(SelectedProduct == null)
+            if (SelectedProduct == null)
                 return;
-            var item = Products.First(i => i.Article.Equals(SelectedProduct.Article));
+            var item = Products.First(i => i.ProductArticleNumber.Equals(SelectedProduct.ProductArticleNumber));
             var index = Products.IndexOf(item);
             item.Count--;
 
-            var test = Global.CurrentCart.First(x => x.ArticleName.Equals(SelectedProduct.Article));
+            var test = Global.CurrentCart.First(x => x.ArticleName.Equals(SelectedProduct.ProductArticleNumber));
             var test2 = Global.CurrentCart.IndexOf(test);
 
-            if (item.Count <= 0) 
+            if (item.Count <= 0)
             {
                 Products.Remove(SelectedProduct);
                 Global.CurrentCart.Remove(test);
             }
-            else 
+            else
             {
                 Products.RemoveAt(index);
                 Products.Insert(index, item);
@@ -67,17 +67,17 @@
             }
             ValueCheck();
         });
-        
-        public AsyncCommand CreateOrderCommand => new(async() =>
+
+        public AsyncCommand CreateOrderCommand => new(async () =>
         {
             int code = rnd.Next(100, 999);
-            await _documentService.GetCheck(OrderAmmount, DiscountAmmount, SelectedPoint, code, await _productService.AddOrder(new Order
+            await _documentService.GetCheck(SelectedPoint, code, await _productService.AddOrder(new Order
             {
                 OrderDate = DateOnly.FromDateTime(DateTime.Now),
-                OrderDeliveryDate = DateOnly.FromDateTime(DateTime.Now.AddDays(Products.FirstOrDefault(a => a.Quantity < 3) != null ? 3 : 6)),
+                OrderDeliveryDate = DateOnly.FromDateTime(DateTime.Now.AddDays(Products.FirstOrDefault(a => a.ProductQuantityInStock < 3) != null ? 3 : 6)),
                 OrderPickupPoint = SelectedPoint.PointId,
                 OrderFullName = FullName == "Гость" ? string.Empty : FullName,
-                OrderAmmount= OrderAmmount,
+                OrderAmmount = OrderAmmount,
                 OrderDiscountAmmount = DiscountAmmount,
                 OrderCode = code,
                 OrderStatus = "Новый"
@@ -86,7 +86,7 @@
             Products.Clear();
             Global.CurrentCart?.Clear();
             ValueCheck();
-        }, bool() => { return SelectedPoint != null && Products.Count != 0; });
+        }, bool () => { return SelectedPoint != null && Products.Count != 0; });
         private void ValueCheck()
         {
             OrderAmmount = 0;
@@ -101,11 +101,11 @@
             {
                 foreach (var item in Products)
                 {
-                    OrderAmmount += (item.Count * item.Price) - ((item.Count * item.Price) * item.Discount / 100);
-                    _orderAmmount += item.Count * item.Price;
+                    OrderAmmount += (item.Count * item.ProductCost) - (item.Count * item.ProductCost * (float)item.ProductDiscountAmount / 100);
+                    _orderAmmount += item.Count * item.ProductCost;
                 }
                 OrderAmmount = (float)Math.Round(OrderAmmount, 2);
-                DiscountAmmount = (float)Math.Round((_orderAmmount - OrderAmmount), 2);
+                DiscountAmmount = (float)Math.Round(_orderAmmount - OrderAmmount, 2);
             }
         }
     }

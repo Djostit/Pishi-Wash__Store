@@ -29,7 +29,7 @@
         }
         public async Task AddNewUser(string UserName, string UserSurname, string UserPatronymic, string UserLogin, string UserPassword)
         {
-            await _tradeContext.Users.AddAsync(new User 
+            await _tradeContext.Users.AddAsync(new User
             {
                 UserName = UserName,
                 UserSurname = UserSurname,

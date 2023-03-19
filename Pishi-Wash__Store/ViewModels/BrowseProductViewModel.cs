@@ -4,11 +4,11 @@
     {
         private readonly PageService _pageService;
         private readonly ProductService _productService;
-        public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
+        public List<string> Sorts { get; set; } = new() { "По умолчанию", "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-5%", "5-9%", "9% и более" };
         public bool IsEnabledCart { get; set; }
         public List<DbProduct> Products { get; set; }
-        public DbProduct SelectedProduct { get; set; }    
+        public DbProduct SelectedProduct { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public int? MaxRecords { get; set; } = 0;
         public int? Records { get; set; } = 0;
@@ -34,7 +34,6 @@
             _pageService = pageService;
             _productService = productService;
             CheckEnabled();
-            SelectedFilter = "Все диапазоны";
         }
 
         private void CheckEnabled() => IsEnabledCart = Global.CurrentCart.Any(c => c.ArticleName != null);
@@ -49,29 +48,29 @@
                 switch (SelectedFilter)
                 {
                     case "0-5%":
-                        currentProduct = currentProduct.Where(p => p.Discount >= 0 && p.Discount < 5).ToList();
+                        currentProduct = currentProduct.Where(p => (float)p.ProductDiscountAmount is >= 0 and < 5).ToList();
                         break;
                     case "5-9%":
-                        currentProduct = currentProduct.Where(p => p.Discount >= 5 && p.Discount < 9).ToList();
+                        currentProduct = currentProduct.Where(p => (float)p.ProductDiscountAmount is >= 5 and < 9).ToList();
                         break;
                     case "9% и более":
-                        currentProduct = currentProduct.Where(p => p.Discount >= 9).ToList();
+                        currentProduct = currentProduct.Where(p => (float)p.ProductDiscountAmount >= 9).ToList();
                         break;
                 }
             }
 
             if (!string.IsNullOrEmpty(Search))
-                currentProduct = currentProduct.Where(p => p.Title.ToLower().Contains(Search.ToLower())).ToList();
+                currentProduct = currentProduct.Where(p => p.ProductNameNavigation.ProductName.ToLower().Contains(Search.ToLower())).ToList();
 
             if (!string.IsNullOrEmpty(SelectedSort))
             {
                 switch (SelectedSort)
                 {
                     case "По возрастанию":
-                        currentProduct = currentProduct.OrderBy(p => p.Price).ToList();
+                        currentProduct = currentProduct.OrderBy(p => p.ProductCost).ToList();
                         break;
                     case "По убыванию":
-                        currentProduct = currentProduct.OrderByDescending(p => p.Price).ToList();
+                        currentProduct = currentProduct.OrderByDescending(p => p.ProductCost).ToList();
                         break;
                 }
             }
@@ -79,10 +78,10 @@
             Records = currentProduct.Count;
             Products = currentProduct;
         }
-        
+
         public DelegateCommand SignOutCommand => new(() =>
         {
-            
+
             UserSetting.Default.UserName = string.Empty;
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
@@ -90,14 +89,14 @@
             Global.CurrentCart.Clear();
             _pageService.ChangePage(new SingInPage());
         });
-        public DelegateCommand AddToCartCommand => new(() => 
+        public DelegateCommand AddToCartCommand => new(() =>
         {
-            var cart = Global.CurrentCart.SingleOrDefault(c => c.ArticleName.Equals(SelectedProduct.Article));
-            if(cart == null)
+            var cart = Global.CurrentCart.SingleOrDefault(c => c.ArticleName.Equals(SelectedProduct.ProductArticleNumber));
+            if (cart == null)
             {
-                Global.CurrentCart.Add(new Cart 
-                { 
-                    ArticleName = SelectedProduct.Article, 
+                Global.CurrentCart.Add(new Cart
+                {
+                    ArticleName = SelectedProduct.ProductArticleNumber,
                     Count = 1
                 });
             }
@@ -108,7 +107,7 @@
             }
             CheckEnabled();
         });
-        public DelegateCommand CartCommand => new(() => 
+        public DelegateCommand CartCommand => new(() =>
         {
             _pageService.ChangePage(new CartPage());
         });

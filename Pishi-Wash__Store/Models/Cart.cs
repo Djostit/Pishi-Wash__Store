@@ -2,7 +2,7 @@
 {
     public class Cart
     {
-        public string ArticleName { get;set; }
-        public int Count { get;set; }
+        public string ArticleName { get; set; }
+        public int Count { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-namespace Pishi_Wash__Store.Data.Models;
+﻿namespace Pishi_Wash__Store.Data.Models;
 
 public partial class TradeContext : DbContext
 {
@@ -10,7 +6,6 @@ public partial class TradeContext : DbContext
         : base(options)
     {
     }
-
     public virtual DbSet<Order> Orders { get; set; }
 
     public virtual DbSet<Orderproduct> Orderproducts { get; set; }

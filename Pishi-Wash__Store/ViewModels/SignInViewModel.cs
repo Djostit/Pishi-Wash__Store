@@ -1,7 +1,4 @@
-﻿using System.Windows.Input;
-using System.Windows.Threading;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class SignInViewModel : BindableBase
     {
@@ -23,7 +20,7 @@ namespace Pishi_Wash__Store.ViewModels
                 if (await _userService.AuthorizationAsync(Username, Password))
                 {
                     ErrorMessageButton = string.Empty;
-                    await Application.Current.Dispatcher.InvokeAsync(async () => 
+                    await Application.Current.Dispatcher.InvokeAsync(async () =>
                     {
                         if (UserSetting.Default.UserRole == "Клиент")
                             _pageService.ChangePage(new BrowseProductPage());
@@ -48,10 +45,10 @@ namespace Pishi_Wash__Store.ViewModels
             return ErrorMessage == string.Empty;
         });
         public DelegateCommand SignUpCommand => new(() => _pageService.ChangePage(new SignUpPage()));
-        public DelegateCommand SignInLaterCommand => new(() => 
+        public DelegateCommand SignInLaterCommand => new(() =>
         {
 #if DEBUG
-            _pageService.ChangePage(new BrowseAdminPage());
+            _pageService.ChangePage(new /*BrowseAdminPage*/BrowseProductPage());
 #else
             _pageService.ChangePage(new BrowseProductPage()); 
 #endif

@@ -1,11 +1,8 @@
 ﻿using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
-using iText.Layout.Borders;
 using iText.Layout.Properties;
-using iText.Pdfa;
 using Paragraph = iText.Layout.Element.Paragraph;
 using Table = iText.Layout.Element.Table;
 
@@ -13,8 +10,18 @@ namespace Pishi_Wash__Store.Services
 {
     public class DocumentService
     {
-        public async Task GetCheck(float OrderAmmount, float DiscountAmmount, Point PickupPoint, int OrderCode, int OrderNumber, List<Product> Products)
+        public async Task GetCheck(Point PickupPoint, int OrderCode, int OrderNumber, List<DbProduct> Products)
         {
+            Func<float> GetFullPrice = () =>
+            {
+                float ammount = 0;
+                foreach (var item in Products)
+                {
+                    ammount += (float)item.DisplayedPrice * Global.CurrentCart.First(c => c.ArticleName.Equals(item.ProductArticleNumber)).Count;
+                }
+                return ammount;
+            };
+
             PdfWriter writer = new($"Товарный чек от {DateOnly.FromDateTime(DateTime.Now).ToString("D")}.pdf");
             PdfDocument pdf = new(writer);
             Document document = new(pdf);
@@ -35,10 +42,15 @@ namespace Pishi_Wash__Store.Services
 
             document.Add(content);
 
-            var table = new Table(5)
+            var table = new Table(7)
                 .SetWidth(UnitValue.CreatePercentValue(100))
                 .SetHeight(UnitValue.CreatePercentValue(100))
                 .SetHorizontalAlignment(iText.Layout.Properties.HorizontalAlignment.CENTER);
+
+            table.AddCell(new Paragraph("№ п/п")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
 
             table.AddCell(new Paragraph("Артикул")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
@@ -65,53 +77,89 @@ namespace Pishi_Wash__Store.Services
                 .SetFont(comic)
                 .SetFontSize(14));
 
-            foreach (var item in Products)
-            {
-                table.AddCell(new Paragraph(item.ProductArticleNumber)
+            table.AddCell(new Paragraph("Сумма")
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFont(comic)
                 .SetFontSize(14));
 
-                table.AddCell(new Paragraph(item.ProductNameNavigation.ProductName)
+            for (int i = 0; i < Products.Count; i++)
+            {
+                table.AddCell(new Paragraph(i.ToString())
+                   .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                   .SetFont(comic)
+                   .SetFontSize(14));
+
+                table.AddCell(new Paragraph(Products[i].ProductArticleNumber)
+                   .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                   .SetFont(comic)
+                   .SetFontSize(14));
+
+                table.AddCell(new Paragraph(Products[i].ProductNameNavigation.ProductName)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                     .SetFont(comic)
                     .SetFontSize(14));
 
-                table.AddCell(new Paragraph(item.ProductDescription)
+                table.AddCell(new Paragraph(Products[i].ProductDescription)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                     .SetFont(comic)
                     .SetFontSize(14));
 
-                table.AddCell(new Paragraph(Global.CurrentCart.FirstOrDefault(c => c.ArticleName.Equals(item.ProductArticleNumber)).Count.ToString())
+                table.AddCell(new Paragraph(Global.CurrentCart.First(c => c.ArticleName.Equals(Products[i].ProductArticleNumber)).Count.ToString())
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                     .SetFont(comic)
                     .SetFontSize(14));
 
-                table.AddCell(new Paragraph(string.Format("{0:C2}", item.ProductCost))
+                table.AddCell(new Paragraph(string.Format("{0:C2}", Products[i].DisplayedPrice))
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                    .SetFont(comic)
+                    .SetFontSize(14));
+
+                table.AddCell(new Paragraph(string.Format("{0:C2}", Products[i].DisplayedPrice * Global.CurrentCart.First(c => c.ArticleName.Equals(Products[i].ProductArticleNumber)).Count))
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                     .SetFont(comic)
                     .SetFontSize(14));
             }
+
+            table.AddCell(new Paragraph(" ")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph(" ")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph(" ")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph(" ")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph(" ")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph("Итого")
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                .SetFont(comic)
+                .SetFontSize(14));
+
+            table.AddCell(new Paragraph(string.Format("{0:C2}", GetFullPrice()))
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFont(comic)
+                .SetFontSize(14));
 
             document.Add(table);
 
             content = new Paragraph(string.Format("Пункт выдачи: {0}, г. {1}, ул. {2}, д. {3}",
                 PickupPoint.Index, PickupPoint.City, PickupPoint.Street, PickupPoint.House))
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT)
-                .SetFont(comic)
-                .SetFontSize(14);
-
-            document.Add(content);
-
-            content = new Paragraph(string.Format("Сумма заказа: {0:C2}", OrderAmmount))
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                .SetFont(comic)
-                .SetFontSize(14);
-
-            document.Add(content);
-
-            content = new Paragraph(string.Format("Сумма скидки: {0:C2}", DiscountAmmount))
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
                 .SetFont(comic)
                 .SetFontSize(14);
 
@@ -128,5 +176,7 @@ namespace Pishi_Wash__Store.Services
 
             await Task.CompletedTask;
         }
+
+
     }
 }

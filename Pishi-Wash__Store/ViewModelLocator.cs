@@ -13,13 +13,13 @@
     internal class ViewModelLocator
     {
         private static ServiceProvider? _provider;
-        public static IConfiguration? _configuration;
+        private static IConfiguration? _configuration;
         public static void Init()
         {
-            var _configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
+            _configuration = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json")
+           .Build();
 
             var services = new ServiceCollection();
 
@@ -40,7 +40,7 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString("LocalConnection");
+                    var conn = _configuration.GetConnectionString(/*"LocalConnection"*/ "RemoteConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)

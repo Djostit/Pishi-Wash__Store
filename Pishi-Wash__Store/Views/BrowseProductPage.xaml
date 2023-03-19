@@ -46,9 +46,11 @@
                       VerticalAlignment="Bottom"
                       materialDesign:HintAssist.Hint="Фильтрация..."
                       Style="{StaticResource pwsComboBox}"
+                      SelectedIndex="0"
                       ItemsSource="{Binding Filters}"
                       SelectedItem="{Binding SelectedFilter}"/>
             <TextBlock Grid.Column="3"
+                       Margin="5"
                        VerticalAlignment="Bottom"
                        TextWrapping="Wrap"
                        FontFamily="{StaticResource pwsFont}"
@@ -120,7 +122,7 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Background="{Binding Discount, Converter={StaticResource StringToBrushConverter}}"
+                        <materialDesign:Card Background="{Binding ProductDiscountAmount, Converter={StaticResource StringToBrushConverter}}"
                                              Padding="8"
                                              HorizontalContentAlignment="Stretch">
                             <Grid HorizontalAlignment="Stretch"
@@ -149,19 +151,19 @@
 
                                     <TextBlock Grid.Row="0"
                                                FontWeight="Bold"
-                                               Text="{Binding Title}"/>
+                                               Text="{Binding ProductNameNavigation.ProductName}"/>
                                     <TextBlock Grid.Row="1"
-                                               Text="{Binding Description}"
+                                               Text="{Binding ProductDescription}"
                                                TextWrapping="Wrap"/>
                                     <TextBlock Grid.Row="2"
-                                               Text="{Binding Manufacturer, StringFormat={}Производитель: {0}}"
+                                               Text="{Binding ProductManufacturerNavigation.ProductManufacturer, StringFormat={}Производитель: {0}}"
                                                TextWrapping="Wrap"/>
                                     <TextBlock Grid.Row="3"
                                                TextWrapping="Wrap">
                                         <TextBlock.Inlines>
                                             <Run Text="Цена:"/>
-                                            <Run Text="{Binding Price, StringFormat={}{0:C}, ConverterCulture=ru-RU}"
-                                                 TextDecorations="{Binding Discount, Converter={StaticResource ValueToTextDecorationsConverter}}"/>
+                                            <Run Text="{Binding ProductCost, StringFormat={}{0:C}, ConverterCulture=ru-RU}"
+                                                 TextDecorations="{Binding ProductDiscountAmount, Converter={StaticResource ValueToTextDecorationsConverter}}"/>
                                             <Run Text="{Binding DisplayedPrice, StringFormat={}{0:C}, ConverterCulture=ru-RU, Mode=OneWay}"/>
                                         </TextBlock.Inlines>
                                     </TextBlock>
@@ -169,7 +171,7 @@
                                 </Grid>
 
                                 <TextBlock Grid.Column="2"
-                                           Text="{Binding Discount, StringFormat={}Скидка: {0}%}"
+                                           Text="{Binding ProductDiscountAmount, StringFormat={}Скидка: {0}%}"
                                            TextWrapping="Wrap"
                                            VerticalAlignment="Center"/>
                             </Grid>

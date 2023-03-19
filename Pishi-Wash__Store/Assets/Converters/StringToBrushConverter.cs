@@ -4,9 +4,9 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var str = value as int?;
+            var str = value as sbyte?;
             if (str == null) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#76e383")); }
-            else if (str >= 9) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7fff00"));}
+            else if (str >= 9) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7fff00")); }
             else { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#76e383")); }
         }
 

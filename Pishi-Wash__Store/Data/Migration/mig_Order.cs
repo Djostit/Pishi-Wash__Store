@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Pishi_Wash__Store.Data.test;
+﻿namespace Pishi_Wash__Store.Data.test;
 
 public partial class Order
 {

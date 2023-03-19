@@ -1,6 +1,4 @@
-﻿using Pishi_Wash__Store.Data.Models;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class BrowseAdminViewModel : BindableBase
     {
@@ -76,18 +74,18 @@ namespace Pishi_Wash__Store.ViewModels
         }
         public DelegateCommand SignOutCommand => new(() =>
         {
-            
+
             UserSetting.Default.UserName = string.Empty;
             UserSetting.Default.UserSurname = string.Empty;
             UserSetting.Default.UserPatronymic = string.Empty;
             UserSetting.Default.UserRole = string.Empty;
             _pageService.ChangePage(new SingInPage());
         });
-        public DelegateCommand EditOrderCommand => new(() => 
+        public DelegateCommand EditOrderCommand => new(() =>
         {
             Debug.WriteLine(SelectedOrder.OrderId.ToString());
         });
-        public DelegateCommand UpdateOrderAmmountCommand => new(async () => 
+        public DelegateCommand UpdateOrderAmmountCommand => new(async () =>
         {
             //await _productService.UpdateAmmountOrder();
         });

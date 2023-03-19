@@ -21,7 +21,7 @@
         {
             await _userService.AddNewUser(UserName, UserSurname, UserPatronymic, UserLogin, UserPassword);
             _pageService.ChangePage(new SingInPage());
-        }, bool () => 
+        }, bool () =>
         {
             if (string.IsNullOrWhiteSpace(UserName)
             || string.IsNullOrWhiteSpace(UserSurname)
@@ -29,7 +29,7 @@
             || string.IsNullOrWhiteSpace(UserLogin)
             || string.IsNullOrWhiteSpace(UserPassword))
                 ErrorMessage = "Обязательно";
-            else if(UserLogin.Length != 14)
+            else if (UserLogin.Length != 14)
                 ErrorMessage = "Слишком короткий логин";
             else if (_userLogin.Contains(UserLogin))
                 ErrorMessage = "Логин занят";
