@@ -85,7 +85,7 @@
         {
             Debug.WriteLine(SelectedOrder.OrderId.ToString());
         });
-        public DelegateCommand UpdateOrderAmmountCommand => new(async () =>
+        public DelegateCommand HelpCommand => new(async () =>
         {
             //await _productService.UpdateAmmountOrder();
         });

@@ -80,8 +80,9 @@
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
                                    Margin="10 0 10 0"/>
-                    <MenuItem Header="Обновить цены"
-                              Command="{Binding UpdateOrderAmmountCommand}"
+                    
+                    <MenuItem Header="Справка"
+                              Command="{Binding HelpCommand}"
                               Foreground="White"/>
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
@@ -120,7 +121,7 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Background="{Binding OrderId, Converter={StaticResource AdminStringToBrushConverter}}"
+                        <materialDesign:Card Background="{Binding Orderproducts, Converter={StaticResource AdminStringToBrushConverter}}"
                                              Padding="8"
                                              HorizontalContentAlignment="Stretch">
                             <Grid VerticalAlignment="Center"

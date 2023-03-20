@@ -48,7 +48,7 @@
         public DelegateCommand SignInLaterCommand => new(() =>
         {
 #if DEBUG
-            _pageService.ChangePage(new /*BrowseAdminPage*/BrowseProductPage());
+            _pageService.ChangePage(new BrowseAdminPage());
 #else
             _pageService.ChangePage(new BrowseProductPage()); 
 #endif
