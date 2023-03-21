@@ -7,8 +7,6 @@ namespace Pishi_Wash__Store.Assets.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var str = value as ICollection<Orderproduct>;
-            //if( str == null) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#20b2aa")); }
-            //return str.Any(o => o.ProductArticleNumberNavigation.ProductQuantityInStock > 3) ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff8c00")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#20b2aa"));
             if (str == null) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#76e383")); }
             else if (str.Any(a => a.ProductArticleNumberNavigation.ProductQuantityInStock > 3)) { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#20b2aa")); }
             else { return new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ff8c00")); }

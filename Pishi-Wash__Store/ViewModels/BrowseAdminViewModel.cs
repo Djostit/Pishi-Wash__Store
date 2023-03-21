@@ -5,7 +5,7 @@
         private readonly PageService _pageService;
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
-        public List<string> Filters { get; set; } = new() { "Все диапазоны", "0-5%", "5-9%", "9% и более" };
+        public List<string> Filters { get; set; } = new() { "Все диапазоны", "Не завершен", "Завершен" };
         public List<Order> Orders { get; set; }
         public Order SelectedOrder { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
@@ -34,24 +34,20 @@
         private async void UpdateProduct()
         {
             var currentOrders = await _productService.GetOrders();
-            currentOrders = currentOrders.Where(c => c.OrderStatus != "Завершен").ToList();
             MaxRecords = currentOrders.Count;
 
-            //if (!string.IsNullOrEmpty(SelectedFilter))
-            //{
-            //    switch (SelectedFilter)
-            //    {
-            //        case "0-5%":
-            //            currentOrders = currentOrders.Where(p => p.Discount >= 0 && p.Discount < 5).ToList();
-            //            break;
-            //        case "5-9%":
-            //            currentOrders = currentOrders.Where(p => p.Discount >= 5 && p.Discount < 9).ToList();
-            //            break;
-            //        case "9% и более":
-            //            currentOrders = currentOrders.Where(p => p.Discount >= 9).ToList();
-            //            break;
-            //    }
-            //}
+            if (!string.IsNullOrEmpty(SelectedFilter))
+            {
+                switch (SelectedFilter)
+                {
+                    case "Не завершен":
+                        currentOrders = currentOrders.Where(c => c.OrderStatus != "Завершен").ToList();
+                        break;
+                    case "Завершен":
+                        currentOrders = currentOrders.Where(c => c.OrderStatus == "Завершен").ToList();
+                        break;
+                }
+            }
 
             if (!string.IsNullOrEmpty(Search))
                 currentOrders = currentOrders.Where(p => p.OrderId.ToString().ToLower().Contains(Search.ToLower())).ToList();
