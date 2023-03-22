@@ -31,6 +31,7 @@
             services.AddTransient<BrowseProductViewModel>();
             services.AddTransient<CartViewModel>();
             services.AddTransient<BrowseAdminViewModel>();
+            services.AddTransient<HelpAdminViewModel>();
 
             #endregion
 
@@ -40,7 +41,7 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString(/*"LocalConnection"*/ "RemoteConnection");
+                    var conn = _configuration.GetConnectionString("LocalConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)
@@ -86,5 +87,6 @@
         public BrowseProductViewModel? BrowseProductViewModel => _provider?.GetRequiredService<BrowseProductViewModel>();
         public CartViewModel? CartViewModel => _provider?.GetRequiredService<CartViewModel>();
         public BrowseAdminViewModel? BrowseAdminViewModel => _provider?.GetRequiredService<BrowseAdminViewModel>();
+        public HelpAdminViewModel? HelpAdminViewModel => _provider?.GetRequiredService<HelpAdminViewModel>();
     }
 }

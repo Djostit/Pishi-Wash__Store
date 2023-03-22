@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Pishi_Wash__Store.Data.Models;
 
 
 namespace Pishi_Wash__Store.Services
@@ -15,7 +16,7 @@ namespace Pishi_Wash__Store.Services
                 cfg.CreateMap<Product, DbProduct>();
             }).CreateMapper();
         }
-
+        public async Task<List<Pcategory>> GetPcategories() => _tradeContext.Pcategories.ToList();
         public async Task<List<DbProduct>> GetProducts()
         {
             List<DbProduct> dbProduct = new();

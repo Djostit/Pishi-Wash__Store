@@ -81,9 +81,9 @@
         {
             Debug.WriteLine(SelectedOrder.OrderId.ToString());
         });
-        public DelegateCommand HelpCommand => new(async () =>
+        public DelegateCommand HelpCommand => new(() =>
         {
-            //await _productService.UpdateAmmountOrder();
+            _pageService.ChangePage(new HelpAdminPage());
         });
     }
 }

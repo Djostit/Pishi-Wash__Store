@@ -1,6 +1,4 @@
-﻿using Pishi_Wash__Store.Data.Models;
-
-namespace Pishi_Wash__Store.Assets.Converters
+﻿namespace Pishi_Wash__Store.Assets.Converters
 {
     class AdminStringToBrushConverter : IValueConverter
     {
