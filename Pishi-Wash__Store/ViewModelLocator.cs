@@ -41,7 +41,7 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString("LocalConnection");
+                    var conn = _configuration.GetConnectionString(/*"LocalConnection"*/ "RemoteConnection");
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
                 catch (MySqlConnector.MySqlException)
