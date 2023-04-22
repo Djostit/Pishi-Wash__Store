@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Pishi_Wash__Store.Data.Models;
 
 
 namespace Pishi_Wash__Store.Services
@@ -17,6 +16,7 @@ namespace Pishi_Wash__Store.Services
             }).CreateMapper();
         }
         public List<Pcategory> GetPcategories() => _tradeContext.Pcategories.ToList();
+        public List<Pmanufacturer> GetPmanufacturers() => _tradeContext.Pmanufacturers.ToList();
         public async Task<List<DbProduct>> GetProducts()
         {
             List<DbProduct> dbProduct = new();
@@ -79,7 +79,7 @@ namespace Pishi_Wash__Store.Services
             List<DbProduct> product = new();
             foreach (var item in currentProduct)
             {
-                if (Global.CurrentCart.FirstOrDefault(c => c.ArticleName.Equals(item.ProductArticleNumber)) != null)
+                if (Global.CurrentCart?.FirstOrDefault(c => c.ArticleName.Equals(item.ProductArticleNumber)) != null)
                     product.Add(item);
             }
             return product;
