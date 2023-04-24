@@ -110,15 +110,15 @@
                         <materialDesign:PackIcon Kind="Add" Foreground="White" />
                     </Button>
                     <ListView FontFamily="{StaticResource pwsFont}"
-                      ItemsSource="{Binding Products,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
-                      SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      HorizontalContentAlignment="Stretch"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                              ItemsSource="{Binding Products,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"
+                              SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Редактировать"
-                                  Command="{Binding EditProductCommand}"/>
+                                          Command="{Binding EditProductCommand}"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
 
@@ -131,11 +131,11 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <materialDesign:Card Background="#76e383"
-                                             Padding="8"
-                                             HorizontalContentAlignment="Stretch">
+                                                     Padding="8"
+                                                     HorizontalContentAlignment="Stretch">
 
                                     <Grid HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Center">
+                                          VerticalAlignment="Center">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="3*"/>
@@ -143,14 +143,14 @@
                                         </Grid.ColumnDefinitions>
 
                                         <Image Grid.Column="0"
-                                       Source="{Binding DisplayedImage}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center"
-                                       Width="125"
-                                       Height="125"/>
+                                               Source="{Binding DisplayedImage}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Width="125"
+                                               Height="125"/>
 
                                         <Grid Grid.Column="1"
-                                      VerticalAlignment="Center">
+                                               VerticalAlignment="Center">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
@@ -160,8 +160,8 @@
                                             </Grid.RowDefinitions>
 
                                             <TextBlock Grid.Row="0"
-                                               FontWeight="Bold"
-                                               TextWrapping="Wrap">
+                                                       FontWeight="Bold"
+                                                       TextWrapping="Wrap">
                                                 <TextBlock.Inlines>
 
                                                     <Run Text="{Binding ProductNameNavigation.ProductName}"/>
@@ -171,23 +171,23 @@
                                             </TextBlock>
 
                                             <TextBlock Grid.Row="1"
-                                               Text="{Binding ProductDescription}"
-                                               TextWrapping="Wrap"/>
+                                                       Text="{Binding ProductDescription}"
+                                                       TextWrapping="Wrap"/>
                                             <TextBlock Grid.Row="2"
-                                               Text="{Binding ProductManufacturerNavigation.ProductManufacturer, StringFormat={}Производитель: {0}}"
-                                               TextWrapping="Wrap"/>
+                                                       Text="{Binding ProductManufacturerNavigation.ProductManufacturer, StringFormat={}Производитель: {0}}"
+                                                       TextWrapping="Wrap"/>
                                             <TextBlock Grid.Row="3"
-                                               Text="{Binding ProductCost, StringFormat={}Цена: {0:C}, ConverterCulture=ru-RU}"
-                                               TextWrapping="Wrap"/>
+                                                       Text="{Binding ProductCost, StringFormat={}Цена: {0:C}, ConverterCulture=ru-RU}"
+                                                       TextWrapping="Wrap"/>
                                             <TextBlock Grid.Row="4"
-                                               Text="{Binding ProductQuantityInStock, StringFormat={}Количество: {0}}"
-                                               TextWrapping="Wrap"/>
+                                                       Text="{Binding ProductQuantityInStock, StringFormat={}Количество: {0}}"
+                                                       TextWrapping="Wrap"/>
                                         </Grid>
 
                                         <TextBlock Grid.Column="2"
-                                           Text="{Binding ProductDiscountAmount, StringFormat={}Скидка: {0}%}"
-                                           TextWrapping="Wrap"
-                                           VerticalAlignment="Center"/>
+                                                   Text="{Binding ProductDiscountAmount, StringFormat={}Скидка: {0}%}"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center"/>
                                     </Grid>
                                 </materialDesign:Card>
                             </DataTemplate>
@@ -202,19 +202,89 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             Margin="20"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}">
+                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
+                            Command="{Binding AddManufacturersCommand}">
                         <materialDesign:PackIcon Kind="Add" Foreground="White" />
                     </Button>
 
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogEditManufacturersOpen}"
+                                               Identifier="EditManufacturers">
+                        <materialDesign:DialogHost.DialogContent>
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding SelectedManufacturers.PmanufacturerId, StringFormat={}Редактирование поставщика с номером {0}}"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding EditManufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Редактирование"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveCurrentManufacturersCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogAddManufacturersOpen}"
+                                               Identifier="AddManufacturers">
+                        <materialDesign:DialogHost.DialogContent>
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="Добавление поставщика"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding AddManufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Добавление"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveAddManufacturersCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
                     <ListView FontFamily="{StaticResource pwsFont}"
-                      ItemsSource="{Binding Pmanufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      HorizontalContentAlignment="Stretch"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                              SelectedItem="{Binding SelectedManufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding Pmanufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Редактировать"
-                                  Command="{Binding EditProductCommand}"/>
+                                  Command="{Binding EditManufacturersCommand}"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
 
@@ -258,19 +328,89 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             Margin="20"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}">
+                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
+                            Command="{Binding AddCategoriesCommand}">
                         <materialDesign:PackIcon Kind="Add" Foreground="White" />
                     </Button>
 
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogEditCategoriesOpen}"
+                                               Identifier="EditCategories">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding SelectedCategories.PcategoryId, StringFormat={}Редактирование категории с номером {0}}"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding EditCategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Редактирование"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveCurrentCategoriesCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogAddCategoriesOpen}"
+                                               Identifier="AddCategories">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="Добавление категории"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding AddCategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Добавление"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveAddCategoriesCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
                     <ListView FontFamily="{StaticResource pwsFont}"
-                      ItemsSource="{Binding Pcategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      HorizontalContentAlignment="Stretch"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                              ItemsSource="{Binding Pcategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedCategories, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Редактировать"
-                                  Command="{Binding EditProductCommand}"/>
+                                          Command="{Binding EditCategoriesCommand}"/>
                             </ContextMenu>
                         </ListView.ContextMenu>
 
@@ -290,6 +430,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="auto"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0"
@@ -301,6 +442,7 @@
                                                Margin="10"
                                                TextWrapping="Wrap"/>
                                     </Grid>
+
                                 </materialDesign:Card>
                             </DataTemplate>
                         </ListView.ItemTemplate>

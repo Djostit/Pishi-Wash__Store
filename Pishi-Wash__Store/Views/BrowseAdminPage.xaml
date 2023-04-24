@@ -80,7 +80,7 @@
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
                                    Margin="10 0 10 0"/>
-                    
+
                     <MenuItem Header="Справка"
                               Command="{Binding HelpCommand}"
                               Foreground="White"/>
@@ -98,6 +98,46 @@
                 </Menu.Resources>
             </Menu>
         </Grid>
+
+        <materialDesign:DialogHost Panel.ZIndex="2"
+                                   Grid.RowSpan="2"
+                                   IsOpen="{Binding IsDialogEditOrderOpen}"
+                                   Identifier="EditOrder">
+            <materialDesign:DialogHost.DialogContent >
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding SelectedOrder.OrderId, StringFormat={}Редактирование заказа с номером {0}}"
+                               Margin="0 0 0 5"
+                               FontFamily="{StaticResource pwsFont}"/>
+                    <DatePicker Grid.Row="1"
+                                FontFamily="{StaticResource pwsFont}"
+                                SelectedDate="{Binding EditDataOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0 0 0 5"
+                                materialDesign:HintAssist.Hint="Дата доставки"/>
+                    <ComboBox Grid.Row="2"
+                              Margin="0 0 0 5"
+                              materialDesign:HintAssist.Hint="Статус заказа"
+                              Style="{StaticResource pwsComboBox}"
+                              ItemsSource="{Binding OrderFilters}"
+                              SelectedIndex="{Binding EditStatusOrderIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Row="3"
+                            Content="Сохранить"
+                            Command="{Binding SaveCurrentOrderCommand}"
+                            Margin="0 0 0 5"/>
+                    <Button Grid.Row="4"
+                            Content="Отмена"
+                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
 
         <Grid Grid.Row="1">
             <ListView FontFamily="{StaticResource pwsFont}"
@@ -134,6 +174,7 @@
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
                                             <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Grid.Row="0"
                                                FontWeight="Bold"
@@ -153,6 +194,9 @@
                                         <TextBlock Grid.Row="5"
                                                Text="{Binding OrderFullName, StringFormat={}ФИО клиента: {0}}"
                                                TextWrapping="Wrap"/>
+                                        <TextBlock Grid.Row="6"
+                                                Text="{Binding OrderStatus, StringFormat={}Статус заказа: {0}}"
+                                                TextWrapping="Wrap"/>
 
 
                                     </Grid>

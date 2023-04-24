@@ -1,6 +1,4 @@
-﻿using System.Windows.Threading;
-
-namespace Pishi_Wash__Store.ViewModels
+﻿namespace Pishi_Wash__Store.ViewModels
 {
     public class HelpAdminViewModel : BindableBase
     {
@@ -9,8 +7,8 @@ namespace Pishi_Wash__Store.ViewModels
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "Бумага офисная", "Для офиса", "Тетради школьные", "Школьные пренадлежности", "Школьные принадлежности" };
         public List<DbProduct> Products { get; set; }
-        public List<Pmanufacturer> Pmanufacturers { get; set; }
-        public List<Pcategory> Pcategories { get; set; }
+        public ObservableCollection<Pmanufacturer> Pmanufacturers { get; set; }
+        public ObservableCollection<Pcategory> Pcategories { get; set; }
         public DbProduct SelectedProduct { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public HelpAdminViewModel(PageService pageService, ProductService productService)
@@ -146,7 +144,7 @@ namespace Pishi_Wash__Store.ViewModels
                         }
 
                         Records = currnetPmanufacturers.Count;
-                        Pmanufacturers = currnetPmanufacturers;
+                        Pmanufacturers = new ObservableCollection<Pmanufacturer>(currnetPmanufacturers);
                     });
                     break;
 
@@ -176,12 +174,139 @@ namespace Pishi_Wash__Store.ViewModels
                         }
 
                         Records = currentPcategories.Count;
-                        Pcategories = currentPcategories;
+                        Pcategories = new ObservableCollection<Pcategory>(currentPcategories);
                     });
                     break;
             }
         }
-        public DelegateCommand EditProductCommand => new(() => Debug.WriteLine(" "));
+
+        #region Product
+
+
+
+        #endregion
+
+
+        #region Caterories
+
+        public Pcategory SelectedCategories { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditCategoriesOpen { get; set; } = false;
+        public string EditCategories { get; set; }
+
+        public DelegateCommand EditCategoriesCommand => new(() =>
+        {
+            if (SelectedCategories == null)
+                return;
+            EditCategories = SelectedCategories.ProductCategory;
+            IsDialogEditCategoriesOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentCategoriesCommand => new(async () =>
+        {
+            if (SelectedCategories.ProductCategory != EditCategories
+            && !Pcategories.Any(p => p.ProductCategory == EditCategories))
+            {
+                var item = Pcategories.First(i => i.PcategoryId == SelectedCategories.PcategoryId);
+                var index = Pcategories.IndexOf(item);
+                item.ProductCategory = EditCategories;
+
+                Pcategories.RemoveAt(index);
+                Pcategories.Insert(index, item);
+                await _productService.SaveChangesAsync();
+            }
+            IsDialogEditCategoriesOpen = false;
+        });
+
+        // Добавление 
+        public bool IsDialogAddCategoriesOpen { get; set; } = false;
+        public string AddCategories { get; set; } 
+        public DelegateCommand AddCategoriesCommand => new(() =>
+        {
+            AddCategories = string.Empty;
+            IsDialogAddCategoriesOpen = true;
+        });
+
+        public DelegateCommand SaveAddCategoriesCommand => new(async () =>
+        {
+            if (!string.IsNullOrWhiteSpace(AddCategories)
+            && !Pcategories.Any(p => p.ProductCategory == AddCategories))
+            {
+                Pcategories.Insert(0, await _productService.AddCategoriesAsync(new Pcategory 
+                { 
+                    ProductCategory = AddCategories 
+                }));
+            }
+            IsDialogAddCategoriesOpen = false;
+        }, bool () =>
+        {
+            return !string.IsNullOrWhiteSpace(AddCategories);
+        });
+
+        #endregion
+
+        #region Manufacturers
+
+        public Pmanufacturer SelectedManufacturers { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditManufacturersOpen { get; set; } = false;
+        public string EditManufacturers { get; set; }
+
+        public DelegateCommand EditManufacturersCommand => new(() =>
+        {
+            if (SelectedManufacturers == null)
+                return;
+            EditManufacturers = SelectedManufacturers.ProductManufacturer;
+            IsDialogEditManufacturersOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentManufacturersCommand => new(async () =>
+        {
+            if (SelectedManufacturers.ProductManufacturer != EditManufacturers
+            && !Pmanufacturers.Any(p => p.ProductManufacturer == EditManufacturers))
+            {
+                var item = Pmanufacturers.First(i => i.PmanufacturerId == SelectedManufacturers.PmanufacturerId);
+                var index = Pmanufacturers.IndexOf(item);
+                item.ProductManufacturer = EditManufacturers;
+
+                Pmanufacturers.RemoveAt(index);
+                Pmanufacturers.Insert(index, item);
+                await _productService.SaveChangesAsync();
+            }
+            IsDialogEditManufacturersOpen = false;
+        });
+
+        // Добавление 
+        public bool IsDialogAddManufacturersOpen { get; set; } = false;
+        public string AddManufacturers { get; set; }
+        public DelegateCommand AddManufacturersCommand => new(() =>
+        {
+            AddManufacturers = string.Empty;
+            IsDialogAddManufacturersOpen = true;
+        });
+
+        public DelegateCommand SaveAddManufacturersCommand => new(async () =>
+        {
+            if (!string.IsNullOrWhiteSpace(AddManufacturers)
+            && !Pmanufacturers.Any(p => p.ProductManufacturer == AddManufacturers))
+            {
+                Pmanufacturers.Insert(0, await _productService.AddManufacturersAsync(new Pmanufacturer
+                {
+                    ProductManufacturer = AddManufacturers
+                }));
+            }
+            IsDialogAddManufacturersOpen = false;
+        }, bool () =>
+        {
+            return !string.IsNullOrWhiteSpace(AddManufacturers);
+        });
+
+
+        #endregion
+
+
         public DelegateCommand BrowseAdminCommand => new(() => _pageService.ChangePage(new BrowseAdminPage()));
         public DelegateCommand SignOutCommand => new(() =>
         {

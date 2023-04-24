@@ -6,8 +6,8 @@
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "Не завершен", "Завершен" };
-        public List<Order> Orders { get; set; }
-        public Order SelectedOrder { get; set; }
+        public List<string> OrderFilters { get; set; } = new() { "Новый", "Завершен" };
+        public ObservableCollection<Order> Orders { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public int? MaxRecords { get; set; } = 0;
         public int? Records { get; set; } = 0;
@@ -66,7 +66,7 @@
             }
 
             Records = currentOrders.Count;
-            Orders = currentOrders;
+            Orders = new ObservableCollection<Order>(currentOrders);
         }
         public DelegateCommand SignOutCommand => new(() =>
         {
@@ -77,13 +77,47 @@
             UserSetting.Default.UserRole = string.Empty;
             _pageService.ChangePage(new SingInPage());
         });
-        public DelegateCommand EditOrderCommand => new(() =>
-        {
-            Debug.WriteLine(SelectedOrder.OrderId.ToString());
-        });
         public DelegateCommand HelpCommand => new(() =>
         {
             _pageService.ChangePage(new HelpAdminPage());
         });
+
+        #region Caterories
+
+        public Order SelectedOrder { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditOrderOpen { get; set; } = false;
+        public DateTime EditDataOrder { get; set; }
+        public int EditStatusOrderIndex { get; set; }
+
+        public DelegateCommand EditOrderCommand => new(() =>
+        {
+            if (SelectedOrder == null)
+                return;
+            EditDataOrder = SelectedOrder.OrderDeliveryDate.ToDateTime(TimeOnly.FromDateTime(DateTime.Now));
+            EditStatusOrderIndex = SelectedOrder.OrderStatus == "Завершен" ? 1 : 0;
+            IsDialogEditOrderOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentOrderCommand => new(async () =>
+        {
+            if (SelectedOrder.OrderDeliveryDate != DateOnly.FromDateTime(EditDataOrder)
+            || SelectedOrder.OrderStatus != OrderFilters[EditStatusOrderIndex])
+            {
+                var item = Orders.First(i => i.OrderId == SelectedOrder.OrderId);
+                var index = Orders.IndexOf(item);
+                item.OrderDeliveryDate = DateOnly.FromDateTime(EditDataOrder);
+                item.OrderStatus = OrderFilters[EditStatusOrderIndex];
+
+                Orders.RemoveAt(index);
+                Orders.Insert(index, item);
+                await _productService.SaveChangesAsync();
+            }
+            IsDialogEditOrderOpen = false;
+        });
+
+        #endregion
+
     }
 }

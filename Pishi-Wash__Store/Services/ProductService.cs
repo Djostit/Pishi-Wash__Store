@@ -85,6 +85,19 @@ namespace Pishi_Wash__Store.Services
             return product;
         }
 
+        public async Task SaveChangesAsync() => await _tradeContext.SaveChangesAsync();
+        public async Task<Pcategory> AddCategoriesAsync(Pcategory foo)
+        {
+            await _tradeContext.Pcategories.AddAsync(foo);
+            await _tradeContext.SaveChangesAsync();
+            return foo;
+        }
+        public async Task<Pmanufacturer> AddManufacturersAsync(Pmanufacturer foo)
+        {
+            await _tradeContext.Pmanufacturers.AddAsync(foo);
+            await _tradeContext.SaveChangesAsync();
+            return foo;
+        }
 
         //public async Task UpdateAmmountOrder()
         //{

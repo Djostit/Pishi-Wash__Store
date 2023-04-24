@@ -41,21 +41,21 @@
             {
                 try
                 {
-                    var conn = _configuration.GetConnectionString("LocalConnection" /*"RemoteConnection"*/);
+                    var conn = _configuration.GetConnectionString("RemoteConnection" /*"LocalConnection"*/);
                     options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                 }
-                catch (MySqlConnector.MySqlException)
+                catch (MySqlConnector.MySqlException ex1)
                 {
-                    if (MessageBox.Show("Попробовать другой вариант?", "Нет подключения к бд", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
+                    if (MessageBox.Show(ex1.Message + "\nПопробовать другой вариант?", "Нет подключения к бд", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
                     {
                         try
                         {
                             var conn = _configuration.GetConnectionString("RemoteConnection");
                             options.UseMySql(conn, ServerVersion.AutoDetect(conn));
                         }
-                        catch (MySqlConnector.MySqlException)
+                        catch (MySqlConnector.MySqlException ex2)
                         {
-                            MessageBox.Show("Ошибка", "Нет подключения к бд", MessageBoxButton.OK, MessageBoxImage.Error);
+                            MessageBox.Show(ex2.Message, "Нет подключения к бд", MessageBoxButton.OK, MessageBoxImage.Error);
                             Process.GetCurrentProcess().Kill();
                         }
                     }
