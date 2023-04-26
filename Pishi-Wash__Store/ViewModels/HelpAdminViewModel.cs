@@ -9,7 +9,8 @@
         public List<DbProduct> Products { get; set; }
         public ObservableCollection<Pmanufacturer> Pmanufacturers { get; set; }
         public ObservableCollection<Pcategory> Pcategories { get; set; }
-        public DbProduct SelectedProduct { get; set; }
+        public ObservableCollection <Pprovider> Pproviders { get; set; }
+        public ObservableCollection <Pname> Pnames { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
         public HelpAdminViewModel(PageService pageService, ProductService productService)
         {
@@ -118,7 +119,7 @@
                     });
                     break;
 
-                case "Поставщики":
+                case "Производители":
                     await Task.Run(() =>
                     {
                         var currnetPmanufacturers = _productService.GetPmanufacturers();
@@ -177,15 +178,92 @@
                         Pcategories = new ObservableCollection<Pcategory>(currentPcategories);
                     });
                     break;
+                case "Поставщики":
+
+                    break;
+                case "Имена":
+
+                    break;
+
             }
         }
 
         #region Product
 
+        public DbProduct SelectedProduct { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditProductOpen { get; set; } = false;
+        public string EditProduct { get; set; }
+
+        public DelegateCommand EditProductCommand => new(() =>
+        {
+            if (SelectedProduct == null)
+                return;
+            IsDialogEditProductOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentProductCommand => new(async () =>
+        {
+            //if (SelectedManufacturers.ProductManufacturer != EditManufacturers
+            //&& !Pmanufacturers.Any(p => p.ProductManufacturer == EditManufacturers))
+            //{
+            //    var item = Pmanufacturers.First(i => i.PmanufacturerId == SelectedManufacturers.PmanufacturerId);
+            //    var index = Pmanufacturers.IndexOf(item);
+            //    item.ProductManufacturer = EditManufacturers;
+
+            //    Pmanufacturers.RemoveAt(index);
+            //    Pmanufacturers.Insert(index, item);
+            //    await _productService.SaveChangesAsync();
+            //}
+            IsDialogEditProductOpen = false;
+        });
+
+        // Добавление 
+        public bool IsDialogAddProductOpen { get; set; } = false;
+        public string ProductArticle { get; set; }
+        public Pname ProductSelectedName { get; set; }
+        public string ProductDescription { get; set; }
+        public Pcategory ProductSelectedCategories { get; set; }
+        public string ProductImage { get; set; }
+        public Pmanufacturer ProductSelectedManufacturer { get; set; }
+        public Pprovider ProductSelectedProvider { get; set; }
+        public float ProductPrice { get; set; }
+        public int ProductDiscount { get; set;}
+        public int ProductCountInStock { get; set; }
+
+        public DelegateCommand AddProductCommand => new(() =>
+        {
+            IsDialogAddProductOpen = true;
+        });
+
+        public DelegateCommand SaveAddProductCommand => new(async () =>
+        {
+            //if (!string.IsNullOrWhiteSpace(AddManufacturers)
+            //&& !Pmanufacturers.Any(p => p.ProductManufacturer == AddManufacturers))
+            //{
+            //    Pmanufacturers.Insert(0, await _productService.AddManufacturersAsync(new Pmanufacturer
+            //    {
+            //        ProductManufacturer = AddManufacturers
+            //    }));
+            //}
+            IsDialogAddProductOpen = false;
+        }, bool() =>
+        {
+            return !string.IsNullOrWhiteSpace(ProductArticle)
+            && ProductSelectedName != null
+            && !string.IsNullOrWhiteSpace(ProductDescription)
+            && ProductSelectedCategories != null
+            && !string.IsNullOrWhiteSpace(ProductImage)
+            && ProductSelectedManufacturer != null
+            && ProductSelectedProvider != null
+            && !float.IsNaN(ProductPrice)
+            && ProductDiscount >= 0
+            && ProductCountInStock >= 0;
+        });
 
 
         #endregion
-
 
         #region Caterories
 
@@ -305,6 +383,15 @@
 
 
         #endregion
+
+        #region Provider
+
+        #endregion
+
+        #region Name
+
+        #endregion
+
 
 
         public DelegateCommand BrowseAdminCommand => new(() => _pageService.ChangePage(new BrowseAdminPage()));

@@ -5,7 +5,7 @@
         private readonly PageService _pageService;
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
-        public List<string> Filters { get; set; } = new() { "Все диапазоны", "Не завершен", "Завершен" };
+        public List<string> Filters { get; set; } = new() { "Все диапазоны", "Новый", "Завершен" };
         public List<string> OrderFilters { get; set; } = new() { "Новый", "Завершен" };
         public ObservableCollection<Order> Orders { get; set; }
         public string FullName { get; set; } = UserSetting.Default.UserName == string.Empty ? "Гость" : $"{UserSetting.Default.UserSurname} {UserSetting.Default.UserName} {UserSetting.Default.UserPatronymic}";
@@ -40,7 +40,7 @@
             {
                 switch (SelectedFilter)
                 {
-                    case "Не завершен":
+                    case "Новый":
                         currentOrders = currentOrders.Where(c => c.OrderStatus != "Завершен").ToList();
                         break;
                     case "Завершен":

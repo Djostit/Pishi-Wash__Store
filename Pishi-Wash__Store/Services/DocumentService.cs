@@ -177,6 +177,9 @@ namespace Pishi_Wash__Store.Services
             await Task.CompletedTask;
         }
 
-
+        public async Task GetReport(DateOnly startDate, DateOnly endDate)
+        {
+            await Task.CompletedTask;
+        }
     }
 }
