@@ -88,6 +88,13 @@
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
                                    Margin="10 0 10 0"/>
 
+                    <MenuItem Header="Отчет..."
+                              Command="{Binding .}"
+                              Foreground="White"/>
+
+                    <Separator Style="{StaticResource MaterialDesignLightSeparator}"
+                                   Margin="10 0 10 0"/>
+
                     <MenuItem Header="Выйти"
                               Command="{Binding SignOutCommand}"
                               Foreground="White"/>
@@ -165,7 +172,7 @@
                                              Padding="8"
                                              HorizontalContentAlignment="Stretch">
                             <TabControl materialDesign:ColorZoneAssist.Mode="Dark">
-                                <TabItem Header="Информация">
+                                <TabItem Header="Кратная информация">
                                     <Grid Margin="5">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
@@ -197,42 +204,68 @@
                                         <TextBlock Grid.Row="6"
                                                 Text="{Binding OrderStatus, StringFormat={}Статус заказа: {0}}"
                                                 TextWrapping="Wrap"/>
-
-
                                     </Grid>
                                 </TabItem>
-                                <TabItem Header="Состав заказа">
-                                    <ListView Margin="5"
-                                              materialDesign:ListBoxItemAssist.ShowSelection="False"
-                                              ItemsSource="{Binding Orderproducts}">
+                                <TabItem Header="Полная информация">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
 
-                                        <ListView.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel />
-                                            </ItemsPanelTemplate>
-                                        </ListView.ItemsPanel>
+                                        <Grid Grid.Column="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
 
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="auto"/>
-                                                        <ColumnDefinition Width="auto"/>
-                                                    </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Row="0"
+                                                       FontWeight="Bold"
+                                                       Text="{Binding OrderId, StringFormat={}Номер заказа: {0}}"/>
+                                            <TextBlock Grid.Row="1"
+                                                       Text="{Binding OrderDate, StringFormat={}Дата заказа: {0:d}, ConverterCulture=ru-RU}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="2"
+                                                       Text="{Binding OrderDeliveryDate, StringFormat={}Дата доставки: {0:d}, ConverterCulture=ru-RU}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="3"
+                                                       Text="{Binding OrderAmmount, StringFormat={}Общая сумма заказа: {0:C2}, ConverterCulture=ru-RU}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="4"
+                                                       Text="{Binding OrderDiscountAmmount, StringFormat={}Общая размер скидки: {0:C2}, ConverterCulture=ru-RU}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="5"
+                                                       Text="{Binding OrderFullName, StringFormat={}ФИО клиента: {0}}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="6"
+                                                       Text="{Binding OrderStatus, StringFormat={}Статус заказа: {0}}"
+                                                       TextWrapping="Wrap"/>
+                                        </Grid>
 
-                                                    <TextBlock Text="{Binding ProductArticleNumber}"
-                                                           Grid.Column="0"
-                                                           TextWrapping="Wrap"
-                                                           Margin="5"/>
+                                        <Grid Grid.Column="1">
+                                            <ListView Margin="5"
+                                                      materialDesign:ListBoxItemAssist.ShowSelection="False"
+                                                      IsHitTestVisible="False"
+                                                      ItemsSource="{Binding Orderproducts}">
+                                                <ListView.View>
+                                                    <GridView>
+                                                        <GridViewColumn Header="Количество"
+                                                                        DisplayMemberBinding="{Binding ProductCount}"/>
+                                                        <GridViewColumn Header="Артикул"
+                                                                        DisplayMemberBinding="{Binding ProductArticleNumberNavigation.ProductArticleNumber}"/>
+                                                        <GridViewColumn Header="Наименование"
+                                                                        DisplayMemberBinding="{Binding ProductArticleNumberNavigation.ProductNameNavigation.ProductName}"/>
 
-                                                    <TextBlock Text="{Binding ProductCount}"
-                                                           Grid.Column="1"
-                                                           TextWrapping="Wrap"
-                                                           Margin="5"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                                    </GridView>
+                                                </ListView.View>
+                                            </ListView>
+                                        </Grid>
+                                    </Grid>
                                 </TabItem>
                             </TabControl>
                         </materialDesign:Card>

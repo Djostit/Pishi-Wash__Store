@@ -448,13 +448,24 @@
                             </ContextMenu>
                         </ListView.ContextMenu>
 
-                        <ListView.ItemsPanel>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding PmanufacturerId}"
+                                                Header="Уникальный номер"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding ProductManufacturer}"
+                                                Header="Наименование"/>
+                            </GridView>
+                        </ListView.View>
+
+                        <!--<ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"/>
                             </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
+                        </ListView.ItemsPanel>-->
 
-                        <ListView.ItemTemplate>
+                        
+
+                        <!--<ListView.ItemTemplate>
                             <DataTemplate>
                                 <materialDesign:Card Background="#76e383"
                                              Padding="8"
@@ -477,7 +488,7 @@
                                     </Grid>
                                 </materialDesign:Card>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
+                        </ListView.ItemTemplate>-->
                     </ListView>
                 </Grid>
             </TabItem>

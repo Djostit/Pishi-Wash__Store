@@ -70,6 +70,7 @@ namespace Pishi_Wash__Store.Services
         {
             _tradeContext.Orderproducts.ToList();
             _tradeContext.Products.ToList();
+            _tradeContext.Pnames.ToList();
             return _tradeContext.Orders.ToList();
         }
 

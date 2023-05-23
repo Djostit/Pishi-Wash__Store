@@ -1,6 +1,4 @@
-﻿namespace Pishi_Wash__Store
-{
-    /*
+﻿/*
      
             ______  __   ____      ______  _____________________
            / __ ) \/ /  / __ \    / / __ \/ ___/_  __/  _/_  __/
@@ -9,7 +7,9 @@
         /_____/ /_/  /_____/\____/\____//____//_/ /___/ /_/     
                                                         
 
-     */
+*/
+namespace Pishi_Wash__Store
+{
     internal class ViewModelLocator
     {
         private static ServiceProvider? _provider;
@@ -39,28 +39,21 @@
 
             services.AddDbContext<TradeContext>(options =>
             {
-                try
+                switch (Environment.MachineName)
                 {
-                    var conn = _configuration.GetConnectionString(/*"RemoteConnection"*/ "LocalConnection");
-                    options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-                }
-                catch (MySqlConnector.MySqlException ex1)
-                {
-                    if (MessageBox.Show(ex1.Message + "\nПопробовать другой вариант?", "Нет подключения к бд", MessageBoxButton.YesNo, MessageBoxImage.Error) == MessageBoxResult.Yes)
-                    {
-                        try
-                        {
-                            var conn = _configuration.GetConnectionString("RemoteConnection");
-                            options.UseMySql(conn, ServerVersion.AutoDetect(conn));
-                        }
-                        catch (MySqlConnector.MySqlException ex2)
-                        {
-                            MessageBox.Show(ex2.Message, "Нет подключения к бд", MessageBoxButton.OK, MessageBoxImage.Error);
-                            Process.GetCurrentProcess().Kill();
-                        }
-                    }
-                    else
+                    case "DJOSTIT":
+                        var connr = _configuration.GetConnectionString("RemoteConnection");
+                        options.UseMySql(connr, ServerVersion.AutoDetect(connr));
+                        break;
+                    case "LAPTOPDJOSTIT":
+                        var connl = _configuration.GetConnectionString("LocalConnection");
+                        options.UseMySql(connl, ServerVersion.AutoDetect(connl));
+                        break;
+                    default:
+                        MessageBox.Show("Я вас не знаю.", "Неизвестный компьютер", MessageBoxButton.OK, MessageBoxImage.Error);
+
                         Process.GetCurrentProcess().Kill();
+                        break;
                 }
             }, ServiceLifetime.Singleton);
 
@@ -76,10 +69,6 @@
             #endregion
 
             _provider = services.BuildServiceProvider();
-            //foreach (var service in services)
-            //{
-            //    _provider.GetRequiredService(service.ServiceType);
-            //}
         }
         public mWindowViewModel? mWindowViewModel => _provider?.GetRequiredService<mWindowViewModel>();
         public SignInViewModel? SignInViewModel => _provider?.GetRequiredService<SignInViewModel>();

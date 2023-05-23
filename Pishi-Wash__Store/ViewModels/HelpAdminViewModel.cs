@@ -391,9 +391,6 @@
         #region Name
 
         #endregion
-
-
-
         public DelegateCommand BrowseAdminCommand => new(() => _pageService.ChangePage(new BrowseAdminPage()));
         public DelegateCommand SignOutCommand => new(() =>
         {
