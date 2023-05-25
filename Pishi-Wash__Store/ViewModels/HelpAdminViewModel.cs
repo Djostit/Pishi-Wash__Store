@@ -8,7 +8,7 @@ namespace Pishi_Wash__Store.ViewModels
         private readonly ProductService _productService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "Бумага офисная", "Для офиса", "Тетради школьные", "Школьные пренадлежности", "Школьные принадлежности" };
-        public List<DbProduct> Products { get; set; }
+        public ObservableCollection<DbProduct> Products { get; set; }
         public ObservableCollection<Pmanufacturer> Pmanufacturers { get; set; }
         public ObservableCollection<Pcategory> Pcategories { get; set; }
         public ObservableCollection <Pprovider> Pproviders { get; set; }
@@ -117,7 +117,8 @@ namespace Pishi_Wash__Store.ViewModels
                         }
 
                         Records = currentProducts.Count;
-                        Products = currentProducts;
+                        Products = new ObservableCollection<DbProduct>(currentProducts);
+
                     });
                     break;
 
@@ -263,17 +264,22 @@ namespace Pishi_Wash__Store.ViewModels
 
         public DelegateCommand SaveCurrentProductCommand => new(async () =>
         {
-            //if (SelectedManufacturers.ProductManufacturer != EditManufacturers
-            //&& !Pmanufacturers.Any(p => p.ProductManufacturer == EditManufacturers))
-            //{
-            //    var item = Pmanufacturers.First(i => i.PmanufacturerId == SelectedManufacturers.PmanufacturerId);
-            //    var index = Pmanufacturers.IndexOf(item);
-            //    item.ProductManufacturer = EditManufacturers;
+            if (SelectedProduct.ProductDiscountAmount.ToString() != EditDiscount
+            || SelectedProduct.ProductStatus == "" != IsProductStatus)
+            {
+                var item = Products.First(i => i.ProductArticleNumber == SelectedProduct.ProductArticleNumber);
+                var index = Products.IndexOf(item);
+                item.ProductDiscountAmount = sbyte.Parse(EditDiscount);
+                if (SelectedProduct.ProductStatus == "" != IsProductStatus)
+                {
+                    item.ProductStatus = IsProductStatus ? "" : "Не активен";
+                }
 
-            //    Pmanufacturers.RemoveAt(index);
-            //    Pmanufacturers.Insert(index, item);
-            //    await _productService.SaveChangesAsync();
-            //}
+
+                Products.RemoveAt(index);
+                Products.Insert(index, item);
+                await _productService.UpdateCurrentProduct(item);
+            }
             IsDialogEditProductOpen = false;
         });
 
@@ -286,9 +292,9 @@ namespace Pishi_Wash__Store.ViewModels
         public string ProductImage { get; set; }
         public Pmanufacturer ProductSelectedManufacturer { get; set; }
         public Pprovider ProductSelectedProvider { get; set; }
-        public float ProductPrice { get; set; }
-        public int ProductDiscount { get; set;}
-        public int ProductCountInStock { get; set; }
+        public string ProductPrice { get; set; }
+        public string ProductDiscount { get; set;}
+        public string ProductCountInStock { get; set; }
 
         public DelegateCommand AddProductCommand => new(() =>
         {
@@ -315,9 +321,9 @@ namespace Pishi_Wash__Store.ViewModels
             && !string.IsNullOrWhiteSpace(ProductImage)
             && ProductSelectedManufacturer != null
             && ProductSelectedProvider != null
-            && !float.IsNaN(ProductPrice)
-            && ProductDiscount >= 0
-            && ProductCountInStock >= 0;
+            && !string.IsNullOrWhiteSpace(ProductPrice)
+            && !string.IsNullOrWhiteSpace(ProductDiscount)
+            && !string.IsNullOrWhiteSpace(ProductCountInStock);
         });
 
 

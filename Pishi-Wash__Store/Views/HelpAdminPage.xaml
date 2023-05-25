@@ -183,6 +183,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Row="0"
+                                           Padding="5"
                                            HorizontalAlignment="Center"
                                            Grid.ColumnSpan="2"
                                            Text="Добавление товара"
@@ -210,6 +211,7 @@
                                          Text="{Binding ProductDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Описание"
+                                         MaxWidth="100"
                                          MaxLength="300"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                          Margin="0 0 5 5"/>
@@ -222,14 +224,25 @@
                                           materialDesign:HintAssist.Hint="Категория"
                                           materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                           Margin="0 0 5 5"/>
-                                <TextBox Grid.Row="5"
-                                         Grid.Column="0"
-                                         Text="{Binding ProductImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                         Style="{StaticResource pwsTextBox}"
-                                         materialDesign:HintAssist.Hint="Изображение"
-                                         MaxLength="50"
-                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
-                                         Margin="0 0 5 5"/>
+                                <Grid Grid.Row="5"
+                                      Grid.Column="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding ProductImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             Grid.Column="0"
+                                             Style="{StaticResource pwsTextBox}"
+                                             materialDesign:HintAssist.Hint="Изображение"
+                                             MaxLength="50"
+                                             materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                             Margin="0 0 5 5"/>
+                                    <Button Style="{StaticResource MaterialDesignToolButton}"
+                                            Grid.Column="1"
+                                            Background="Transparent">
+                                        <materialDesign:PackIcon Kind="Image"/>
+                                    </Button>
+                                </Grid>
                                 <ComboBox Grid.Row="1"
                                           Grid.Column="1"
                                           SelectedItem="{Binding ProductSelectedManufacturer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -250,26 +263,29 @@
                                           Margin="0 0 0 5"/>
                                 <TextBox Grid.Row="3"
                                          Grid.Column="1"
-                                         Text="{Binding ProductPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding ProductPrice, Converter={StaticResource StringToIntConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Стоимость"
-                                         MaxLength="50"
+                                         materialDesign:TextFieldAssist.PrefixText="₽"
+                                         MaxLength="4"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                          Margin="0 0 0 5"/>
                                 <TextBox Grid.Row="4"
                                          Grid.Column="1"
-                                         Text="{Binding ProductDiscount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding ProductDiscount, Converter={StaticResource StringToIntConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Скидка"
-                                         MaxLength="50"
+                                         materialDesign:TextFieldAssist.PrefixText="%"
+                                         MaxLength="2"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                          Margin="0 0 0 5"/>
                                 <TextBox Grid.Row="5"
                                          Grid.Column="1"
-                                         Text="{Binding ProductCountInStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding ProductCountInStock, Converter={StaticResource StringToIntConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Количество"
-                                         MaxLength="50"
+                                         materialDesign:TextFieldAssist.PrefixText="шт."
+                                         MaxLength="4"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                          Margin="0 0 0 5"/>
                                 <Button Grid.Row="6"

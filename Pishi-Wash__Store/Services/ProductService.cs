@@ -89,6 +89,14 @@ namespace Pishi_Wash__Store.Services
         }
 
         public async Task SaveChangesAsync() => await _tradeContext.SaveChangesAsync();
+        public async Task UpdateCurrentProduct(DbProduct product)
+        {
+            var pt = await _tradeContext.Products.FindAsync(product.ProductArticleNumber);
+            pt.ProductDiscountAmount = product.ProductDiscountAmount;
+            pt.ProductStatus = product.ProductStatus;
+            _tradeContext.Products.Update(pt);
+            await _tradeContext.SaveChangesAsync();
+        }
         public async Task<Pcategory> AddCategoriesAsync(Pcategory foo)
         {
             await _tradeContext.Pcategories.AddAsync(foo);
