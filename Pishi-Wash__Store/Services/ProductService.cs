@@ -15,6 +15,8 @@ namespace Pishi_Wash__Store.Services
                 cfg.CreateMap<Product, DbProduct>();
             }).CreateMapper();
         }
+        public List<Pname> GetNames() => _tradeContext.Pnames.ToList();
+        public List<Pprovider> GetProdivers() => _tradeContext.Pproviders.ToList();
         public List<Pcategory> GetPcategories() => _tradeContext.Pcategories.ToList();
         public List<Pmanufacturer> GetPmanufacturers() => _tradeContext.Pmanufacturers.ToList();
         public async Task<List<DbProduct>> GetProducts()
@@ -99,6 +101,21 @@ namespace Pishi_Wash__Store.Services
             await _tradeContext.SaveChangesAsync();
             return foo;
         }
+
+        public async Task<Pprovider> AddProviderAsync(Pprovider foo)
+        {
+            await _tradeContext.Pproviders.AddAsync(foo);
+            await _tradeContext.SaveChangesAsync();
+            return foo;
+        }
+
+        public async Task<Pname> AddNameAsync(Pname foo)
+        {
+            await _tradeContext.Pnames.AddAsync(foo);
+            await _tradeContext.SaveChangesAsync();
+            return foo;
+        }
+        
 
         //public async Task UpdateAmmountOrder()
         //{

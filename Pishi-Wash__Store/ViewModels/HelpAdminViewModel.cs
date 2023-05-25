@@ -1,4 +1,6 @@
-﻿namespace Pishi_Wash__Store.ViewModels
+﻿using Pishi_Wash__Store.Data.Models;
+
+namespace Pishi_Wash__Store.ViewModels
 {
     public class HelpAdminViewModel : BindableBase
     {
@@ -179,10 +181,62 @@
                     });
                     break;
                 case "Поставщики":
+                    await Task.Run(() =>
+                    {
+                        var currentProvider = _productService.GetProdivers();
+                        MaxRecords = currentProvider.Count;
 
+                        if (!string.IsNullOrEmpty(Search))
+                            currentProvider = currentProvider.Where(p => p.ProductProvider
+                            .ToString()
+                            .ToLower()
+                            .Contains(Search.ToLower())).ToList();
+
+                        if (!string.IsNullOrEmpty(SelectedSort))
+                        {
+                            switch (SelectedSort)
+                            {
+                                case "По возрастанию":
+                                    currentProvider = currentProvider.OrderBy(o => o.PproviderId).ToList();
+                                    break;
+                                case "По убыванию":
+                                    currentProvider = currentProvider.OrderByDescending(o => o.PproviderId).ToList();
+                                    break;
+                            }
+                        }
+
+                        Records = currentProvider.Count;
+                        Pproviders = new ObservableCollection<Pprovider>(currentProvider);
+                    });
                     break;
                 case "Имена":
+                    await Task.Run(() =>
+                    {
+                        var currentName = _productService.GetNames();
+                        MaxRecords = currentName.Count;
 
+                        if (!string.IsNullOrEmpty(Search))
+                            currentName = currentName.Where(p => p.ProductName
+                            .ToString()
+                            .ToLower()
+                            .Contains(Search.ToLower())).ToList();
+
+                        if (!string.IsNullOrEmpty(SelectedSort))
+                        {
+                            switch (SelectedSort)
+                            {
+                                case "По возрастанию":
+                                    currentName = currentName.OrderBy(o => o.PnameId).ToList();
+                                    break;
+                                case "По убыванию":
+                                    currentName = currentName.OrderByDescending(o => o.PnameId).ToList();
+                                    break;
+                            }
+                        }
+
+                        Records = currentName.Count;
+                        Pnames = new ObservableCollection<Pname>(currentName);
+                    });
                     break;
 
             }
@@ -386,9 +440,119 @@
 
         #region Provider
 
+        public Pprovider SelectedProvider { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditProviderOpen { get; set; } = false;
+        public string EditProvider { get; set; }
+
+        public DelegateCommand EditProviderCommand => new(() =>
+        {
+            if (SelectedProvider == null)
+                return;
+            EditProvider = SelectedProvider.ProductProvider;
+            IsDialogEditProviderOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentProviderCommand => new(async () =>
+        {
+            if (SelectedProvider.ProductProvider != EditProvider
+            && !Pproviders.Any(p => p.ProductProvider == EditProvider))
+            {
+                var item = Pproviders.First(i => i.PproviderId == SelectedProvider.PproviderId);
+                var index = Pproviders.IndexOf(item);
+                item.ProductProvider = EditProvider;
+
+                Pproviders.RemoveAt(index);
+                Pproviders.Insert(index, item);
+                await _productService.SaveChangesAsync();
+            }
+            IsDialogEditProviderOpen = false;
+        });
+
+        // Добавление 
+        public bool IsDialogAddProviderOpen { get; set; } = false;
+        public string AddProvider { get; set; }
+        public DelegateCommand AddProviderCommand => new(() =>
+        {
+            AddProvider = string.Empty;
+            IsDialogAddProviderOpen = true;
+        });
+
+        public DelegateCommand SaveAddProviderCommand => new(async () =>
+        {
+            if (!string.IsNullOrWhiteSpace(AddProvider)
+            && !Pproviders.Any(p => p.ProductProvider == AddProvider))
+            {
+                Pproviders.Insert(0, await _productService.AddProviderAsync(new Pprovider
+                {
+                    ProductProvider = AddProvider,
+                }));
+            }
+            IsDialogAddProviderOpen = false;
+        }, bool () =>
+        {
+            return !string.IsNullOrWhiteSpace(AddProvider);
+        });
+
         #endregion
 
         #region Name
+
+        public Pname SelectedName { get; set; }
+
+        // Редактирование
+        public bool IsDialogEditNameOpen { get; set; } = false;
+        public string EditName { get; set; }
+
+        public DelegateCommand EditNameCommand => new(() =>
+        {
+            if (SelectedName == null)
+                return;
+            EditName = SelectedName.ProductName;
+            IsDialogEditNameOpen = true;
+        });
+
+        public DelegateCommand SaveCurrentNameCommand => new(async () =>
+        {
+            if (SelectedName.ProductName != EditName
+            && !Pnames.Any(p => p.ProductName == EditName))
+            {
+                var item = Pnames.First(i => i.PnameId == SelectedName.PnameId);
+                var index = Pnames.IndexOf(item);
+                item.ProductName = EditName;
+
+                Pnames.RemoveAt(index);
+                Pnames.Insert(index, item);
+                await _productService.SaveChangesAsync();
+            }
+            IsDialogEditNameOpen = false;
+        });
+
+        // Добавление 
+        public bool IsDialogAddNameOpen { get; set; } = false;
+        public string AddName { get; set; }
+        public DelegateCommand AddNameCommand => new(() =>
+        {
+            AddName = string.Empty;
+            IsDialogAddNameOpen = true;
+        });
+
+        public DelegateCommand SaveAddNameCommand => new(async () =>
+        {
+            if (!string.IsNullOrWhiteSpace(AddName)
+            && !Pnames.Any(p => p.ProductName == AddName))
+            {
+                Pnames.Insert(0, await _productService.AddNameAsync(new Pname
+                {
+                    ProductName = AddName,
+                }));
+            }
+            IsDialogAddNameOpen = false;
+        }, bool () =>
+        {
+            return !string.IsNullOrWhiteSpace(AddName);
+        });
 
         #endregion
         public DelegateCommand BrowseAdminCommand => new(() => _pageService.ChangePage(new BrowseAdminPage()));

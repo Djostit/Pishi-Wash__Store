@@ -51,7 +51,6 @@ namespace Pishi_Wash__Store
                         break;
                     default:
                         MessageBox.Show("Я вас не знаю.", "Неизвестный компьютер", MessageBoxButton.OK, MessageBoxImage.Error);
-
                         Process.GetCurrentProcess().Kill();
                         break;
                 }

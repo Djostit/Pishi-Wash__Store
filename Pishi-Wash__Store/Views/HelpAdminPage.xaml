@@ -185,7 +185,8 @@
                                 <ComboBox Grid.Row="2"
                                          Grid.Column="0"
                                          SelectedItem="{Binding ProductSelectedName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          ItemsSource="{Binding Pnames}"
+                                         ItemsSource="{Binding Pnames}"
+                                         DisplayMemberPath="ProductName"
                                          Style="{StaticResource pwsComboBox}"
                                          materialDesign:HintAssist.Hint="Наименование"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
@@ -221,6 +222,7 @@
                                           Style="{StaticResource pwsComboBox}"
                                           materialDesign:HintAssist.Hint="Производитель"
                                           ItemsSource="{Binding Pmanufacturers}"
+                                          DisplayMemberPath="ProductManufacturer"
                                           materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                           Margin="0 0 0 5"/>
                                 <ComboBox Grid.Row="2"
@@ -228,6 +230,7 @@
                                           SelectedItem="{Binding ProductSelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource pwsComboBox}"
                                           ItemsSource="{Binding Pproviders}"
+                                          DisplayMemberPath="ProductProvider"
                                           materialDesign:HintAssist.Hint="Поставщик"
                                           materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                           Margin="0 0 0 5"/>
@@ -456,39 +459,6 @@
                                                 Header="Наименование"/>
                             </GridView>
                         </ListView.View>
-
-                        <!--<ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>-->
-
-                        
-
-                        <!--<ListView.ItemTemplate>
-                            <DataTemplate>
-                                <materialDesign:Card Background="#76e383"
-                                             Padding="8"
-                                             HorizontalContentAlignment="Stretch">
-                                    <Grid Grid.Column="1"
-                                      VerticalAlignment="Center">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Grid.Column="0"
-                                               Text="{Binding PmanufacturerId}"
-                                               Margin="10"
-                                               TextWrapping="Wrap"/>
-                                        <TextBlock Grid.Column="1"
-                                               Text="{Binding ProductManufacturer}"
-                                               Margin="10"
-                                               TextWrapping="Wrap"/>
-                                    </Grid>
-                                </materialDesign:Card>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>-->
                     </ListView>
                 </Grid>
             </TabItem>
@@ -585,46 +555,228 @@
                             </ContextMenu>
                         </ListView.ContextMenu>
 
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <materialDesign:Card Background="#76e383"
-                                             Padding="8"
-                                             HorizontalContentAlignment="Stretch">
-                                    <Grid Grid.Column="1"
-                                      VerticalAlignment="Center">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <TextBlock Grid.Column="0"
-                                               Text="{Binding PcategoryId}"
-                                               Margin="10"
-                                               TextWrapping="Wrap"/>
-                                        <TextBlock Grid.Column="1"
-                                               Text="{Binding ProductCategory}"
-                                               Margin="10"
-                                               TextWrapping="Wrap"/>
-                                    </Grid>
-
-                                </materialDesign:Card>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding PcategoryId}"
+                                                Header="Уникальный номер"
+                                                Width="auto"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding ProductCategory}"
+                                                Header="Наименование"
+                                                Width="auto"/>
+                            </GridView>
+                        </ListView.View>
                     </ListView>
                 </Grid>
             </TabItem>
             <TabItem Header="Поставщики">
-                
+                <Grid>
+                    <Button Panel.ZIndex="1"    
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="20"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
+                            Command="{Binding AddProviderCommand}">
+                        <materialDesign:PackIcon Kind="Add" Foreground="White" />
+                    </Button>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogEditProviderOpen}"
+                                               Identifier="EditProvider">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding SelectedProvider.PproviderId, StringFormat={}Редактирование поставщика с номером {0}}"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding EditProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Редактирование"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveCurrentProviderCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogAddProviderOpen}"
+                                               Identifier="AddProvider">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="Добавление поставщика"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding AddProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Добавление"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveAddProviderCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <ListView FontFamily="{StaticResource pwsFont}"
+                              ItemsSource="{Binding Pproviders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedProvider, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Редактировать"
+                                          Command="{Binding EditProviderCommand}"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding PproviderId}"
+                                                Header="Уникальный номер"
+                                                Width="auto"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding ProductProvider}"
+                                                Header="Наименование"
+                                                Width="auto"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </TabItem>
             <TabItem Header="Имена">
-                
+                <Grid>
+                    <Button Panel.ZIndex="1"    
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="20"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryDarkButton}"
+                            Command="{Binding AddNameCommand}">
+                        <materialDesign:PackIcon Kind="Add" Foreground="White" />
+                    </Button>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogEditNameOpen}"
+                                               Identifier="EditName">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding SelectedName.PnameId, StringFormat={}Редактирование поставщика с номером {0}}"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding EditName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Редактирование"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveCurrentNameCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <materialDesign:DialogHost Panel.ZIndex="2"
+                                               IsOpen="{Binding IsDialogAddNameOpen}"
+                                               Identifier="AddName">
+                        <materialDesign:DialogHost.DialogContent >
+                            <Grid Margin="20">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="Добавление имени"
+                                           FontFamily="{StaticResource pwsFont}"/>
+
+                                <TextBox Grid.Row="1"
+                                         Text="{Binding AddName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource pwsTextBox}"
+                                         materialDesign:HintAssist.Hint="Добавление"
+                                         MaxLength="30"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         Margin="0 0 0 5"/>
+                                <Button Grid.Row="2" 
+                                        Content="Сохранить"
+                                        Command="{Binding SaveAddNameCommand}"
+                                        Margin="0 0 0 5"/>
+                                <Button Grid.Row="3" 
+                                        Content="Отмена"
+                                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                            </Grid>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+
+                    <ListView FontFamily="{StaticResource pwsFont}"
+                              ItemsSource="{Binding Pnames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalContentAlignment="Stretch"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Редактировать"
+                                          Command="{Binding EditNameCommand}"/>
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding PnameId}"
+                                                Header="Уникальный номер"
+                                                Width="auto"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding ProductName}"
+                                                Header="Наименование"
+                                                Width="auto"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
