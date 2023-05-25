@@ -121,24 +121,38 @@
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Grid.Row="0"
                                            Text="{Binding SelectedProduct.ProductName, StringFormat={}Редактирование заказа с номером {0}}"
                                            FontFamily="{StaticResource pwsFont}"/>
-
-                                <TextBox Grid.Row="1"
+                                <CheckBox Grid.Row="1"
+                                          Content="Активен"
+                                          FontFamily="{StaticResource pwsFont}"
+                                          IsChecked="{Binding IsProductStatus}"
+                                          Margin="0 10 0 10"/>
+                                <TextBox Grid.Row="2"
+                                         materialDesign:HintAssist.Hint="Скидка"
+                                         materialDesign:HintAssist.FontFamily="{StaticResource pwsFont}"
+                                         Margin="0 0 0 10"
+                                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                         Text="{Binding EditDiscount, Converter={StaticResource StringToIntConverter}, UpdateSourceTrigger=PropertyChanged}"
+                                         MaxLength="2"
+                                         materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                                         FontFamily="{StaticResource pwsFont}"/>
+                                <!--<TextBox Grid.Row="1"
                                          Text="{Binding EditManufacturers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Редактирование"
                                          MaxLength="30"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
-                                         Margin="0 0 0 5"/>
-                                <Button Grid.Row="2" 
+                                         Margin="0 0 0 5"/>-->
+                                <Button Grid.Row="3" 
                                         Content="Сохранить"
                                         Command="{Binding SaveCurrentProductCommand}"
                                         Margin="0 0 0 5"/>
-                                <Button Grid.Row="3" 
+                                <Button Grid.Row="4" 
                                         Content="Отмена"
                                         Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
                             </Grid>
@@ -320,6 +334,7 @@
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
                                             </Grid.RowDefinitions>
 
                                             <TextBlock Grid.Row="0"
@@ -344,6 +359,9 @@
                                                        TextWrapping="Wrap"/>
                                             <TextBlock Grid.Row="4"
                                                        Text="{Binding ProductQuantityInStock, StringFormat={}Количество: {0}}"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Grid.Row="5"
+                                                       Text="{Binding ProductStatus, StringFormat={}Статус: {0:N}, Converter={StaticResource EmptyStringStatusConverter}}"
                                                        TextWrapping="Wrap"/>
                                         </Grid>
 

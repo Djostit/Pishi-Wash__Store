@@ -243,17 +243,21 @@ namespace Pishi_Wash__Store.ViewModels
         }
 
         #region Product
-
         public DbProduct SelectedProduct { get; set; }
 
         // Редактирование
         public bool IsDialogEditProductOpen { get; set; } = false;
         public string EditProduct { get; set; }
+        public bool IsProductStatus { get; set; }
+        public string EditDiscount { get; set; }
 
         public DelegateCommand EditProductCommand => new(() =>
         {
             if (SelectedProduct == null)
                 return;
+
+            IsProductStatus = SelectedProduct.ProductStatus == "";
+            EditDiscount = SelectedProduct.ProductDiscountAmount.ToString();
             IsDialogEditProductOpen = true;
         });
 

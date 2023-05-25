@@ -18,6 +18,8 @@
             <converterts:StringToBrushConverter x:Key="StringToBrushConverter"/>
             <converterts:ValueToTextDecorationsConverter x:Key="ValueToTextDecorationsConverter"/>
             <converterts:AdminStringToBrushConverter x:Key="AdminStringToBrushConverter"/>
+            <converterts:EmptyStringStatusConverter x:Key="EmptyStringStatusConverter"/>
+            <converterts:StringToIntConverter x:Key="StringToIntConverter"/>
 
             <Color x:Key="pwsPrimaryColor">#ffffff</Color>
             <Color x:Key="pwsSecondaryColor">#76e383</Color>
