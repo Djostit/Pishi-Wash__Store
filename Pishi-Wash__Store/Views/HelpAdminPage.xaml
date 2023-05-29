@@ -211,7 +211,7 @@
                                          Text="{Binding ProductDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                          Style="{StaticResource pwsTextBox}"
                                          materialDesign:HintAssist.Hint="Описание"
-                                         MaxWidth="100"
+                                         MaxWidth="250"
                                          MaxLength="300"
                                          materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
                                          Margin="0 0 5 5"/>
@@ -236,10 +236,12 @@
                                              materialDesign:HintAssist.Hint="Изображение"
                                              MaxLength="50"
                                              materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
-                                             Margin="0 0 5 5"/>
+                                             Margin="0 0 5 5"
+                                             IsReadOnly="True"/>
                                     <Button Style="{StaticResource MaterialDesignToolButton}"
                                             Grid.Column="1"
-                                            Background="Transparent">
+                                            Background="Transparent"
+                                            Command="{Binding ChoiceImageCommand}">
                                         <materialDesign:PackIcon Kind="Image"/>
                                     </Button>
                                 </Grid>

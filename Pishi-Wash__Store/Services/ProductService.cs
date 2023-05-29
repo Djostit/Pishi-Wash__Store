@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Pishi_Wash__Store.Models;
 
 
 namespace Pishi_Wash__Store.Services
@@ -96,6 +97,13 @@ namespace Pishi_Wash__Store.Services
             pt.ProductStatus = product.ProductStatus;
             _tradeContext.Products.Update(pt);
             await _tradeContext.SaveChangesAsync();
+        }
+        public async Task<DbProduct> AddProductAsync(Product product)
+        {
+            await _tradeContext.Products.AddAsync(product);
+            await _tradeContext.SaveChangesAsync();
+            var dbProduct = _mapper.Map<DbProduct>(product);
+            return dbProduct;
         }
         public async Task<Pcategory> AddCategoriesAsync(Pcategory foo)
         {

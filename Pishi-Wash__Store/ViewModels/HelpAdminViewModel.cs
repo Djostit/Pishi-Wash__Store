@@ -1,4 +1,5 @@
-﻿using Pishi_Wash__Store.Data.Models;
+﻿using Microsoft.Win32;
+using Pishi_Wash__Store.Data.Models;
 
 namespace Pishi_Wash__Store.ViewModels
 {
@@ -311,6 +312,23 @@ namespace Pishi_Wash__Store.ViewModels
             //        ProductManufacturer = AddManufacturers
             //    }));
             //}
+            if (!Products.Any(p => p.ProductArticleNumber == ProductArticle))
+            {
+                Products.Insert(0, await _productService.AddProductAsync(new Product
+                {
+                    ProductArticleNumber = ProductArticle,
+                    ProductCost = float.Parse(ProductPrice),
+                    ProductDescription = ProductDescription,
+                    ProductPhoto = ProductImage == null ? "" : ProductImage,
+                    ProductName = ProductSelectedName.PnameId,
+                    ProductCategory = ProductSelectedCategories.PcategoryId,
+                    ProductManufacturer = ProductSelectedManufacturer.PmanufacturerId,
+                    ProductProvider = ProductSelectedProvider.PproviderId,
+                    ProductDiscountAmount = sbyte.Parse(ProductDiscount),
+                    ProductQuantityInStock = int.Parse(ProductCountInStock),
+                    ProductStatus = "",
+                }));
+            }
             IsDialogAddProductOpen = false;
         }, bool() =>
         {
@@ -318,7 +336,6 @@ namespace Pishi_Wash__Store.ViewModels
             && ProductSelectedName != null
             && !string.IsNullOrWhiteSpace(ProductDescription)
             && ProductSelectedCategories != null
-            && !string.IsNullOrWhiteSpace(ProductImage)
             && ProductSelectedManufacturer != null
             && ProductSelectedProvider != null
             && !string.IsNullOrWhiteSpace(ProductPrice)
@@ -326,6 +343,20 @@ namespace Pishi_Wash__Store.ViewModels
             && !string.IsNullOrWhiteSpace(ProductCountInStock);
         });
 
+        public DelegateCommand ChoiceImageCommand => new(() => 
+        {
+            OpenFileDialog openFileDialog = new()
+            {
+                Title = "Выберите изображение",
+                Filter = "Изображения (*.jpg, *jpeg, *.png)|*.jpg;*.jpeg;*.png",
+                Multiselect = false
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ProductImage  = Path.GetFileName(openFileDialog.FileName);
+            }
+        });
 
         #endregion
 
