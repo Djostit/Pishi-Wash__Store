@@ -4,6 +4,7 @@
     {
         private readonly PageService _pageService;
         private readonly ProductService _productService;
+        private readonly DocumentService _documentService;
         public List<string> Sorts { get; set; } = new() { "По возрастанию", "По убыванию" };
         public List<string> Filters { get; set; } = new() { "Все диапазоны", "Новый", "Завершен" };
         public List<string> OrderFilters { get; set; } = new() { "Новый", "Завершен" };
@@ -26,10 +27,11 @@
             get { return GetValue<string>(); }
             set { SetValue(value, changedCallback: UpdateProduct); }
         }
-        public BrowseAdminViewModel(PageService pageService, ProductService productService)
+        public BrowseAdminViewModel(PageService pageService, ProductService productService, DocumentService documentService)
         {
             _pageService = pageService;
             _productService = productService;
+            _documentService = documentService;
         }
         private async void UpdateProduct()
         {
@@ -119,5 +121,28 @@
 
         #endregion
 
+        #region SaleReport
+
+        public bool IsDialogSaleReportOpen { get; set; } = false;
+        public DateTime StartSaleReport { get; set; }
+        public DateTime MinStartSaleReport { get; set; }
+        public DateTime EndSaleReport { get; set; }
+        public DateTime MaxEndSaleReport { get; set; }
+
+        public DelegateCommand OpenSaleReportCommand => new(() =>
+        {
+            MinStartSaleReport = _productService.MinDateOrder();
+            MaxEndSaleReport = _productService.MaxDateOrder();
+            StartSaleReport = MinStartSaleReport;
+            EndSaleReport = MinStartSaleReport;
+            IsDialogSaleReportOpen = true;
+        });
+
+        public AsyncCommand SaveSaleReportCommand => new(async() =>
+        {
+            IsDialogSaleReportOpen = false;
+            await _documentService.GetSaleReport(await _productService.GetOrderReport(StartSaleReport, EndSaleReport));
+        });
+        #endregion
     }
 }

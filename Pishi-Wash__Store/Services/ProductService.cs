@@ -131,8 +131,14 @@ namespace Pishi_Wash__Store.Services
             await _tradeContext.SaveChangesAsync();
             return foo;
         }
-        
 
+        public DateTime MinDateOrder() => _tradeContext.Orders.Min(o => o.OrderDate).ToDateTime(TimeOnly.FromDateTime(DateTime.Now));
+        public DateTime MaxDateOrder() => _tradeContext.Orders.Max(o => o.OrderDate).ToDateTime(TimeOnly.FromDateTime(DateTime.Now));
+
+        public async Task<List<Order>> GetOrderReport(DateTime MinDate, DateTime MaxDate)
+        {
+            return _tradeContext.Orders.Where(o => o.OrderDate >= DateOnly.FromDateTime(MinDate) && o.OrderDate <= DateOnly.FromDateTime(MaxDate)).ToList();
+        }
         //public async Task UpdateAmmountOrder()
         //{
         //    await _tradeContext.Orderproducts.ToListAsync();

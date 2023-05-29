@@ -89,7 +89,7 @@
                                    Margin="10 0 10 0"/>
 
                     <MenuItem Header="Отчет..."
-                              Command="{Binding .}"
+                              Command="{Binding OpenSaleReportCommand}"
                               Foreground="White"/>
 
                     <Separator Style="{StaticResource MaterialDesignLightSeparator}"
@@ -105,6 +105,49 @@
                 </Menu.Resources>
             </Menu>
         </Grid>
+
+        <materialDesign:DialogHost Panel.ZIndex="2"
+                                   Grid.RowSpan="2"
+                                   IsOpen="{Binding IsDialogSaleReportOpen}"
+                                   Identifier="SaleReport">
+            <materialDesign:DialogHost.DialogContent >
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0"
+                               Text="Отчет по продажам"
+                               Margin="0 0 0 5"
+                               FontFamily="{StaticResource pwsFont}"/>
+                    <DatePicker Grid.Row="1"
+                                FontFamily="{StaticResource pwsFont}"
+                                DisplayDateStart="{Binding MinStartSaleReport}"
+                                DisplayDateEnd="{Binding MaxEndSaleReport}"
+                                SelectedDate="{Binding StartSaleReport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0 0 0 5"
+                                materialDesign:HintAssist.Hint="С"/>
+                    <DatePicker Grid.Row="2"
+                                FontFamily="{StaticResource pwsFont}"
+                                DisplayDateStart="{Binding MinStartSaleReport}"
+                                DisplayDateEnd="{Binding MaxEndSaleReport}"
+                                SelectedDate="{Binding EndSaleReport, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0 0 0 5"
+                                materialDesign:HintAssist.Hint="До"/>
+                    <Button Grid.Row="3"
+                            Content="Сохранить"
+                            Command="{Binding SaveSaleReportCommand}"
+                            Margin="0 0 0 5"/>
+                    <Button Grid.Row="4"
+                            Content="Отмена"
+                            Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
 
         <materialDesign:DialogHost Panel.ZIndex="2"
                                    Grid.RowSpan="2"
